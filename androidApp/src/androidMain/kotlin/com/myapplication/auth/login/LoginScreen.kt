@@ -1,4 +1,3 @@
-package com.myapplication.auth.login
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -31,6 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.myapplication.R
+import com.myapplication.auth.login.LoginUiState
 import com.myapplication.common.components.CustomTextField
 import com.myapplication.common.theming.AppTheme
 import com.myapplication.common.theming.ButtonHeight

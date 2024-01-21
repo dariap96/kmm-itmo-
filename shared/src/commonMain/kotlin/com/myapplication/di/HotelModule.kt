@@ -1,5 +1,6 @@
 package com.myapplication.di
 
+import com.myapplication.auth.login.LoginViewModel
 import com.myapplication.data.hotel.HotelRepository
 import com.myapplication.data.httpClient
 import com.myapplication.viewmodel.HotelViewModel
@@ -45,6 +46,10 @@ val hotelModule = module {
 
     single {
         HotelRepository(get())
+    }
+
+    single {
+        LoginViewModel()
     }
 
     sharedViewModel {

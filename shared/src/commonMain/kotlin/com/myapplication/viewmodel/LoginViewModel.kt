@@ -3,20 +3,18 @@ package com.myapplication.auth.login
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.datastore.core.DataStore
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.myapplication.viewmodel.SharedViewModel
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
 //    private val signInUseCase: SignInUseCase,
 //    private val dataStore: DataStore<UserSettings>
-): ViewModel() {
+): SharedViewModel() {
     var uiState by mutableStateOf(LoginUiState())
         private set
 
     fun signIn(){
-        viewModelScope.launch {
+        sharedViewModelScope.launch {
             uiState = uiState.copy(isAuthenticating = true)
 
 //            val authResultData = signInUseCase(uiState.email, uiState.password)
