@@ -2,6 +2,7 @@ plugins {
     kotlin("multiplatform")
     id("com.android.application")
     id("org.jetbrains.compose")
+    kotlin("plugin.serialization") version "1.9.10"
 }
 
 kotlin {
@@ -21,6 +22,11 @@ kotlin {
                 implementation("io.insert-koin:koin-core:3.4.3")
                 implementation("androidx.navigation:navigation-compose:2.7.6")
                 implementation("io.insert-koin:koin-android:3.4.3")
+                implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
+                implementation("com.google.accompanist:accompanist-systemuicontroller:0.28.0")
+                implementation("io.coil-kt:coil-compose:2.4.0")
+                implementation("androidx.core:core-splashscreen:1.0.1")
+                implementation("androidx.datastore:datastore-preferences:1.0.0")
             }
         }
     }
@@ -45,5 +51,11 @@ android {
     }
     kotlin {
         jvmToolchain(17)
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.3"
+    }
+    buildFeatures {
+        compose = true
     }
 }

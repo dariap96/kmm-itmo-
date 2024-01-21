@@ -16,6 +16,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.myapplication.common.theming.AppTheme
 import com.myapplication.model.MenuItem
 import com.myapplication.navigation.AppNavHost
 import com.myapplication.ui.AppBar
@@ -29,7 +30,7 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             val navController: NavHostController = rememberNavController()
-            MyApplicationTheme {
+            AppTheme {
                 val scaffoldState = rememberScaffoldState()
                 val scope = rememberCoroutineScope()
                 Scaffold(

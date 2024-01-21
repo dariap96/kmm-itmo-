@@ -8,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.myapplication.AppScreen
 import com.myapplication.HotelList
+import com.myapplication.auth.login.Login
 
 @Composable
 fun AppNavHost(
@@ -30,7 +31,7 @@ fun AppNavHost(
         }
 
         composable(route = AppScreen.Login.name) {
-            Text(text = "Login Screen todo") // todo
+            Login(navHostController) // todo
         }
 
         composable(route = AppScreen.Clients.name) {
