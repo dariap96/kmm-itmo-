@@ -19,6 +19,7 @@ kotlin {
                 implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
                 implementation("io.insert-koin:koin-androidx-compose:3.4.3")
                 implementation("io.insert-koin:koin-core:3.4.3")
+                implementation("androidx.navigation:navigation-compose:2.7.6")
                 implementation("io.insert-koin:koin-android:3.4.3")
             }
         }

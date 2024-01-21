@@ -1,29 +1,34 @@
 package com.myapplication
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Divider
 import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.myapplication.model.MenuItem
+import com.myapplication.navigation.AppNavHost
 import com.myapplication.ui.AppBar
 import com.myapplication.ui.DrawerBody
 import com.myapplication.ui.DrawerHeader
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
-    @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
+            val navController: NavHostController = rememberNavController()
             MyApplicationTheme {
                 val scaffoldState = rememberScaffoldState()
                 val scope = rememberCoroutineScope()
@@ -45,31 +50,45 @@ class MainActivity : AppCompatActivity() {
                         DrawerBody(
                             items = listOf(
                                 MenuItem(
-                                    id = "home",
-                                    title = "Home",
+                                    id = AppScreen.Hotels.name,
+                                    title = "Hotels",
                                     contentDescription = "Go to home screen",
                                     icon = Icons.Default.Home
                                 ),
                                 MenuItem(
-                                    id = "settings",
-                                    title = "Settings",
-                                    contentDescription = "Go to settings screen",
-                                    icon = Icons.Default.Settings
+                                    id = AppScreen.Managers.name,
+                                    title = "Managers",
+                                    contentDescription = "Go to managers screen",
+                                    icon = Icons.Default.AccountCircle
                                 ),
                                 MenuItem(
-                                    id = "help",
-                                    title = "Help",
-                                    contentDescription = "Go to help screen",
-                                    icon = Icons.Default.Info
+                                    id = AppScreen.Clients.name,
+                                    title = "Clients",
+                                    contentDescription = "Go to clients screen",
+                                    icon = Icons.Default.List
+                                ),
+                                MenuItem(
+                                    id = AppScreen.Requests.name,
+                                    title = "Requests",
+                                    contentDescription = "Go to requests screen",
+                                    icon = Icons.Default.Email
                                 )
                             ),
                             onItemClick = {
-                                println("Clicked on ${it.title}")
+                                navController.navigate(it.id)
+                                scope.launch {
+                                    scaffoldState.drawerState.close()
+                                }
                             }
                         )
                     },
-                ) {
-                    HotelList()
+                ) { innerPadding ->
+
+                    AppNavHost(
+                        navHostController = navController,
+                        startDestination = AppScreen.Hotels.name,
+                        modifier = Modifier.padding(innerPadding)
+                    )
                 }
             }
         }
