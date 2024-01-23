@@ -12,9 +12,11 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.myapplication.common.theming.AppTheme
 import com.myapplication.model.MenuItem
@@ -30,19 +32,24 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             val navController: NavHostController = rememberNavController()
+            val navStackBackEntry by navController.currentBackStackEntryAsState()
+            val currentDestination = navStackBackEntry?.destination?.route
+
             AppTheme {
                 val scaffoldState = rememberScaffoldState()
                 val scope = rememberCoroutineScope()
                 Scaffold(
                     scaffoldState = scaffoldState,
                     topBar = {
-                             AppBar(
-                                 onNavigationClick = {
-                                     scope.launch {
-                                         scaffoldState.drawerState.open()
-                                     }
-                                 }
-                             )
+                        if (currentDestination !== AppScreen.Login.name) {
+                            AppBar(
+                                onNavigationClick = {
+                                    scope.launch {
+                                        scaffoldState.drawerState.open()
+                                    }
+                                }
+                            )
+                        }
                     },
                     drawerGesturesEnabled =  scaffoldState.drawerState.isOpen,
                     drawerContent = {
@@ -84,14 +91,14 @@ class MainActivity : AppCompatActivity() {
                         )
                     },
                 ) { innerPadding ->
-
                     AppNavHost(
                         navHostController = navController,
-                        startDestination = AppScreen.Hotels.name,
+                        startDestination = AppScreen.Login.name,
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
             }
         }
     }
+
 }
