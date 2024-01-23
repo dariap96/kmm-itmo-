@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -21,14 +22,17 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.myapplication.AppScreen
 import com.myapplication.R
 import com.myapplication.auth.login.LoginUiState
 import com.myapplication.common.components.CustomTextField
@@ -39,14 +43,17 @@ import com.myapplication.common.theming.LargeSpacing
 import com.myapplication.common.theming.MediumSpacing
 import com.myapplication.common.theming.SmallSpacing
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun LoginScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier,
     uiState: LoginUiState,
     onLoginChange: (String) -> Unit,
-    onPasswordChange: (String) -> Unit
+    onPasswordChange: (String) -> Unit,
+    onSignIn:() -> Unit
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
     val context = LocalContext.current
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(
@@ -73,7 +80,9 @@ fun LoginScreen(
                 value = uiState.login,
                 onValueChange = onLoginChange,
                 hint = R.string.username_hint,
-                keyboardType = KeyboardType.Text
+                keyboardType = KeyboardType.Text,
+                keyboardActions = KeyboardActions(
+                    onDone = {keyboardController?.hide()})
             )
 
             CustomTextField(
@@ -81,13 +90,14 @@ fun LoginScreen(
                 onValueChange = onPasswordChange,
                 hint = R.string.password_hint,
                 keyboardType = KeyboardType.Password,
-                isPasswordTextField = true
+                isPasswordTextField = true,
+                keyboardActions = KeyboardActions(
+                    onDone = {keyboardController?.hide()})
             )
 
             Button(
                 onClick = {
-                   // onSignInClick()
-                          navController.navigate("home")
+                   onSignIn()
                 },
                 modifier = modifier
                     .fillMaxWidth()
@@ -110,32 +120,17 @@ fun LoginScreen(
         key1 = uiState.authenticationSucceed,
         key2 = uiState.authErrorMessage,
         block = {
-
-            if (uiState.authErrorMessage != null) {
+            if (uiState.authenticationSucceed) {
+                navController.navigate(AppScreen.Hotels.name)
+            }
+            val test = uiState.authErrorMessage
+            println("$test uiState.authErrorMessage onLogin()")
+            if (uiState.authErrorMessage?.isNotEmpty() == true) {
                 Toast.makeText(context, uiState.authErrorMessage, Toast.LENGTH_SHORT).show()
+                //todo: fix that it appears only for the first login attempt
             }
         }
     )
-}
-
-@Composable
-fun GoToSignup(
-    modifier: Modifier = Modifier,
-    onNavigateToSignup: () -> Unit
-) {
-    Row(
-        modifier = modifier, horizontalArrangement = Arrangement.spacedBy(
-            SmallSpacing
-        )
-    ) {
-        Text(text = "Don't have an account?", style = MaterialTheme.typography.caption)
-        Text(
-            text = "SignUp",
-            style = MaterialTheme.typography.caption,
-            color = MaterialTheme.colors.primary,
-            modifier = modifier.clickable { onNavigateToSignup() }
-        )
-    }
 }
 
 @Preview
@@ -146,7 +141,8 @@ fun LoginScreenPreview() {
             rememberNavController(),
             uiState = LoginUiState(),
             onLoginChange = {},
-            onPasswordChange = {}
+            onPasswordChange = {},
+            onSignIn = {}
         )
     }
 }

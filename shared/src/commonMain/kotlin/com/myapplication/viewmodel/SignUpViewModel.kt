@@ -1,26 +1,27 @@
-package com.myapplication.auth.login
+package com.myapplication.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.myapplication.auth.AuthRepository
 import com.myapplication.auth.LoginRequest
+import com.myapplication.auth.SignUpRequest
 import com.myapplication.model.Resource
-import com.myapplication.viewmodel.SharedViewModel
 import kotlinx.coroutines.launch
 
-
-class LoginViewModel(
-    private val authRepository: AuthRepository
+class SignUpViewModel(private val authRepository: AuthRepository
 ): SharedViewModel() {
-    var uiState by mutableStateOf(LoginUiState())
+    var uiState by mutableStateOf(SignUpUiState())
         private set
 
-    fun signIn(){
+    fun signUp(){
         sharedViewModelScope.launch {
             uiState = uiState.copy(isAuthenticating = true)
 
-            authRepository.login(LoginRequest(uiState.login, uiState.password)).collect { result ->
+            authRepository.signUp(SignUpRequest(uiState.name,
+                uiState.surname,
+                uiState.login,
+                uiState.password), uiState.role).collect { result ->
 
                 when(result.status) {
                     Resource.Status.LOADING -> {
@@ -29,20 +30,21 @@ class LoginViewModel(
                     Resource.Status.ERROR -> {
                         uiState = uiState.copy(
                             isAuthenticating =  false,
-                            authErrorMessage = "wrong login or password"
+                            authErrorMessage = "such login already exists"
                         )
                     }
+                    //todo: handle error when one or more fields aren't filled
 
                     Resource.Status.SUCCESS -> {
                         uiState = uiState.copy(
-                        isAuthenticating =  false,
-                        authenticationSucceed = true
+                            isAuthenticating =  false,
+                            authenticationSucceed = false
                         )
-                        println("user logged in")
+                        println("user signed up")
                     }
 
                     else -> {
-                       println("internal error")
+                        println("internal error")
                     }
                 }
 
@@ -54,19 +56,29 @@ class LoginViewModel(
         uiState = uiState.copy(login = input)
     }
 
+    fun updateName(input: String){
+        uiState = uiState.copy(name = input)
+    }
+
+    fun updateSurname(input: String){
+        uiState = uiState.copy(surname = input)
+    }
+
     fun updatePassword(input: String){
         uiState = uiState.copy(password = input)
     }
 }
 
-data class LoginUiState(
+data class SignUpUiState(
     var login: String = "",
+    var name: String = "",
+    var surname: String = "",
     var password: String = "",
+    var role: String = "",
     var isAuthenticating: Boolean = false,
     var authErrorMessage: String? = "",
     var authenticationSucceed: Boolean = false
 )
-
 
 
 

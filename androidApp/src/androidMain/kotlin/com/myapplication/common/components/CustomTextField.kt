@@ -3,6 +3,7 @@ package com.myapplication.common.components
 import androidx.annotation.StringRes
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -35,6 +36,7 @@ fun CustomTextField(
     keyboardType: KeyboardType = KeyboardType.Text,
     isPasswordTextField: Boolean = false,
     isSingleLine: Boolean = true,
+    keyboardActions: KeyboardActions?,
     @StringRes hint: Int
 ) {
 
@@ -111,7 +113,8 @@ fun CustomTextFieldPreview() {
         CustomTextField(
             value = "",
             onValueChange = {},
-            hint = R.string.default_error_message
+            hint = R.string.default_error_message,
+            keyboardActions = KeyboardActions()
         )
     }
 }

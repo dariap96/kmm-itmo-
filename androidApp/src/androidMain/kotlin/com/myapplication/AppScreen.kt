@@ -4,6 +4,7 @@ enum class AppScreen() {
     Hotels,
     Managers,
     Login,
+    SignUp,
     Clients,
     Requests
 }

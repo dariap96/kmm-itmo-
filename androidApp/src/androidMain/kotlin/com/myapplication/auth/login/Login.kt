@@ -12,6 +12,7 @@ fun Login(navController: NavHostController) {
         navController = navController,
         uiState = viewModel.uiState,
         onLoginChange = viewModel::updateLogin,
-        onPasswordChange = viewModel::updatePassword
+        onPasswordChange = viewModel::updatePassword,
+        onSignIn = viewModel::signIn
     )
 }
