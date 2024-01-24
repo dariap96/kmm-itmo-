@@ -12,11 +12,9 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.myapplication.common.theming.AppTheme
 import com.myapplication.model.AppScreen
@@ -26,7 +24,7 @@ import com.myapplication.service.TopBarService
 import com.myapplication.ui.AppBar
 import com.myapplication.ui.DrawerBody
 import com.myapplication.ui.DrawerHeader
-import com.myapplication.viewmodel.UserViewModel
+import com.myapplication.viewmodel.UserService
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.compose.koinViewModel
@@ -36,8 +34,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            val userViewModel = koinViewModel<UserViewModel>()
-            val userFlow = userViewModel.items
+            val userService by inject<UserService>()
             val topBarService: TopBarService by inject()
             val navController: NavHostController = rememberNavController()
 
@@ -45,7 +42,7 @@ class MainActivity : AppCompatActivity() {
                 println("DESTINATION CHANGE ${destination}")
                 topBarService.stateByScreen(destination.route ?: AppScreen.Login.name)
             }
-            userViewModel.getWhoAmI()
+            userService.getWhoAmI()
 
             AppTheme {
                 val scaffoldState = rememberScaffoldState()

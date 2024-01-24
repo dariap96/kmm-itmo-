@@ -3,7 +3,6 @@ package com.myapplication.viewmodel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import com.myapplication.auth.UserRepository
 import com.myapplication.data.hotel.HotelRepository
 import com.myapplication.data.hotel.RoomItem
 import com.myapplication.model.Resource
@@ -11,7 +10,7 @@ import kotlinx.coroutines.launch
 
 class HotelItemViewModel(
     private val repository: HotelRepository,
-    private val userRepository: UserViewModel): SharedViewModel() {
+    private val userService: UserService): SharedViewModel() {
 
     var uiState by mutableStateOf(HotelItemUiState())
         private set
@@ -19,8 +18,9 @@ class HotelItemViewModel(
 
     init {
         sharedViewModelScope.launch {
-            var role = userRepository.items.value.data?.role?.role
-            uiState = if (role === "DIRECTOR") {
+            val role = userService.items.value.data?.role?.role
+
+            uiState = if (role == "DIRECTOR") {
                 uiState.copy(isAbleToEdit = true)
             } else {
                 uiState.copy(isAbleToEdit = false)
@@ -34,9 +34,9 @@ class HotelItemViewModel(
 
             when(result.status) {
                 Resource.Status.LOADING -> {
-                    uiState = uiState.copy(
-                        isUpdating = true
-                    )
+//                    uiState = uiState.copy(
+//                        isUpdating = true
+//                    )
                 }
 
                 Resource.Status.ERROR -> {
@@ -63,7 +63,7 @@ class HotelItemViewModel(
         }
     }
 
-    fun updateName(input: String){
+    fun updateName(input: String) {
         uiState = uiState.copy(name = input)
     }
 
@@ -127,7 +127,7 @@ data class HotelItemUiState(
     var updateErrorMessage: String? = "",
     var updateSucceed: Boolean = false,
     var isUpdateButtonActive: Boolean = false,
-    var isAbleToEdit: Boolean = true,
+    var isAbleToEdit: Boolean = false,
     var currentHotelId: Int = 0,
-    var isEditMode: Boolean = true
+    var isEditMode: Boolean = false
 )

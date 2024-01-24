@@ -11,7 +11,7 @@ import com.myapplication.viewmodel.HotelItemViewModel
 import com.myapplication.viewmodel.HotelViewModel
 import com.myapplication.viewmodel.SharedViewModel
 import com.myapplication.viewmodel.SignUpViewModel
-import com.myapplication.viewmodel.UserViewModel
+import com.myapplication.viewmodel.UserService
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BearerTokens
 import io.ktor.client.plugins.auth.providers.bearer
@@ -100,7 +100,7 @@ val hotelModule = module {
     }
 
     sharedViewModel {
-        LoginViewModel(get())
+        LoginViewModel(get(), get())
     }
 
     sharedViewModel {
@@ -111,8 +111,8 @@ val hotelModule = module {
         HotelViewModel(get())
     }
 
-    sharedViewModel {
-        UserViewModel(get())
+    single {
+        UserService(get())
     }
 
     sharedViewModel {

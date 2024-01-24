@@ -25,11 +25,11 @@ data class LoginResponse(
 data class UserItem(
     val id: Int,
     val name: String,
-    val surname: String,
-    val bDay: String?,
+    val surname: String? = null,
+    val bDay: String? = null,
     val login: String,
     val password: String,
-    val email: String?,
+    val email: String? = null,
     val role: RoleItem
 )
 

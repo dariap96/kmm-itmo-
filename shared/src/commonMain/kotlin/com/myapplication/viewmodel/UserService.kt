@@ -3,6 +3,9 @@ package com.myapplication.viewmodel
 import com.myapplication.auth.UserItem
 import com.myapplication.auth.UserRepository
 import com.myapplication.model.Resource
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -14,16 +17,15 @@ data class UserData(
     val error: String? = null
 )
 
-class UserViewModel(private val repository: UserRepository): SharedViewModel() {
+class UserService(private val repository: UserRepository) {
     private val _items = MutableStateFlow(UserData())
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
 
     val items = _items.asStateFlow()
 
-    fun getWhoAmI() = sharedViewModelScope.launch {
-        println("Whoami")
-
+    fun getWhoAmI() = coroutineScope.launch {
         repository.whoAmI().collect { result ->
-            println("get current user data")
+            println("get current user data $result")
 
             when(result.status) {
                 Resource.Status.LOADING -> {

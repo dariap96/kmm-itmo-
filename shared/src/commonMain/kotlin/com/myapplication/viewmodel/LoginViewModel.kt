@@ -7,11 +7,13 @@ import com.myapplication.auth.AuthRepository
 import com.myapplication.auth.LoginRequest
 import com.myapplication.model.Resource
 import com.myapplication.viewmodel.SharedViewModel
+import com.myapplication.viewmodel.UserService
 import kotlinx.coroutines.launch
 
 
 class LoginViewModel(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val userService: UserService,
 ): SharedViewModel() {
     var uiState by mutableStateOf(LoginUiState())
         private set
@@ -41,6 +43,8 @@ class LoginViewModel(
                         authenticationSucceed = true
                         )
                         println("user logged in")
+
+                        userService.getWhoAmI()
                     }
 
                     else -> {
