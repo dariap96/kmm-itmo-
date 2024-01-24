@@ -59,3 +59,6 @@ android {
         compose = true
     }
 }
+dependencies {
+    implementation("androidx.compose.material3:material3:1.1.2")
+}

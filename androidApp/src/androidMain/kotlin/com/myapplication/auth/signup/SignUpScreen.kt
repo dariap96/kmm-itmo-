@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -80,6 +81,10 @@ fun SignUpScreen(
             verticalArrangement = Arrangement.spacedBy(LargeSpacing)
         ) {
 
+            Text(text = "REGISTER MANAGER", style = MaterialTheme.typography.h6)
+
+            Spacer(modifier = Modifier.height(15.dp))
+
             CustomTextField(
                 value = uiState.login,
                 onValueChange = onLoginChange,
@@ -116,6 +121,8 @@ fun SignUpScreen(
                     onDone = {keyboardController?.hide()})
             )
 
+            Spacer(modifier = Modifier.height(10.dp))
+
             Button(
                 onClick = {
                     //todo: implement set role logic
@@ -128,7 +135,11 @@ fun SignUpScreen(
                 elevation = ButtonDefaults.elevation(
                     defaultElevation = 0.dp
                 ),
-                shape = MaterialTheme.shapes.medium
+                shape = MaterialTheme.shapes.medium,
+                enabled = uiState.name.length > 0
+                        && uiState.surname.length > 0
+                        && uiState.login.length > 0
+                        && uiState.password.length > 0
             ) {
                 Text(text = stringResource(id = R.string.signup_button_hint))
             }

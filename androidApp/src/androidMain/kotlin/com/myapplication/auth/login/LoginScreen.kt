@@ -1,12 +1,11 @@
 
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -24,6 +23,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -41,7 +41,6 @@ import com.myapplication.common.theming.ButtonHeight
 import com.myapplication.common.theming.ExtraLargeSpacing
 import com.myapplication.common.theming.LargeSpacing
 import com.myapplication.common.theming.MediumSpacing
-import com.myapplication.common.theming.SmallSpacing
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -76,6 +75,10 @@ fun LoginScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(LargeSpacing)
         ) {
+            Text(text = "WELCOME", style = MaterialTheme.typography.h6)
+
+            Spacer(modifier = Modifier.height(15.dp))
+
             CustomTextField(
                 value = uiState.login,
                 onValueChange = onLoginChange,
@@ -95,6 +98,8 @@ fun LoginScreen(
                     onDone = {keyboardController?.hide()})
             )
 
+            Spacer(modifier = Modifier.height(10.dp))
+
             Button(
                 onClick = {
                    onSignIn()
@@ -105,7 +110,8 @@ fun LoginScreen(
                 elevation = ButtonDefaults.elevation(
                     defaultElevation = 0.dp
                 ),
-                shape = MaterialTheme.shapes.medium
+                shape = MaterialTheme.shapes.medium,
+                enabled = uiState.login.length > 0 && uiState.password.length > 0
             ) {
                 Text(text = stringResource(id = R.string.login_button_label))
             }

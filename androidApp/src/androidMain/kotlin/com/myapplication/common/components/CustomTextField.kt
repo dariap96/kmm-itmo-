@@ -3,6 +3,7 @@ package com.myapplication.common.components
 import androidx.annotation.StringRes
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Icon
@@ -24,9 +25,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.myapplication.R
 import com.myapplication.common.theming.AppTheme
-import com.myapplication.common.theming.Gray
+import com.myapplication.common.theming.LightGray
 
 @Composable
 fun CustomTextField(
@@ -56,8 +58,8 @@ fun CustomTextField(
         colors = TextFieldDefaults.textFieldColors(
             backgroundColor = if (isSystemInDarkTheme()){
                 MaterialTheme.colors.surface
-            }else{
-                Gray
+            } else {
+                LightGray
             },
             unfocusedIndicatorColor = Color.Transparent,
             focusedIndicatorColor = Color.Transparent
@@ -86,6 +88,43 @@ fun CustomTextField(
         shape = MaterialTheme.shapes.medium
     )
 
+}
+
+@Composable
+fun NonAuthCustomTextField(
+    modifier: Modifier = Modifier,
+    value: String,
+    onValueChange: (String) -> Unit,
+    keyboardType: KeyboardType = KeyboardType.Text,
+    isSingleLine: Boolean = true,
+    @StringRes hint: Int
+) {
+
+    TextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = modifier.fillMaxWidth().height(51.dp),
+        textStyle = MaterialTheme.typography.body2,
+        keyboardOptions = KeyboardOptions.Default.copy(
+            keyboardType = keyboardType
+        ),
+        singleLine = isSingleLine,
+        colors = TextFieldDefaults.textFieldColors(
+            backgroundColor = if (isSystemInDarkTheme()){
+                MaterialTheme.colors.surface
+            } else {
+                LightGray
+            },
+            unfocusedIndicatorColor = Color.Transparent,
+            focusedIndicatorColor = Color.Transparent
+        ),
+        trailingIcon = null,
+        visualTransformation = VisualTransformation.None,
+        placeholder = {
+            Text(text = stringResource(id = hint), style = MaterialTheme.typography.body2)
+        },
+        shape = MaterialTheme.shapes.medium
+    )
 }
 
 @Composable

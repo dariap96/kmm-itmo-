@@ -4,8 +4,8 @@ import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.ui.graphics.Color
 
-val Blue = Color(0xFF1E80F8)
-val Gray = Color(0xFFF3F3F4)
+val Blue = Color(0xFF4A91F2)
+val Gray = Color(0xFF808080)
 
 
 val Black = Color(0xFF000000)
@@ -20,14 +20,14 @@ val Black24 = Color(0xFF242526)
 val White = Color(0xFFFFFFFF)
 
 val White87 = Color(0xFFE2E2E2)
-val LightGray = Color(0xFF8A8A8D)
+val LightGray = Color(0xFFF3F3F4)
 
 val White36 = Color(0xFFE5E5E5)
 val White76 = Color(0xFFF5F5F5)
 
 internal val LightColors = lightColors(
     primary = Blue,
-    primaryVariant = Blue,
+    primaryVariant = Color.LightGray,
     background = White76,
     onBackground = Black87,
     surface = White,
@@ -36,7 +36,7 @@ internal val LightColors = lightColors(
 
 internal val DarkColors = darkColors(
     primary = Blue,
-    primaryVariant = Blue,
+    primaryVariant = Color.LightGray,
     background = Black87,
     onBackground = White87,
     surface = Black24,
