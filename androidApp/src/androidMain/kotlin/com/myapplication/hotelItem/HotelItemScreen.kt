@@ -40,6 +40,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.myapplication.DefaultImage
 import com.myapplication.R
 import com.myapplication.common.components.NonAuthCustomTextField
 import com.myapplication.common.theming.Blue
@@ -106,7 +107,9 @@ fun HotelItemScreen (
                     Text(text = "Hotel name: ${uiState.name}")
                 }
                 Spacer(modifier = Modifier.height(16.dp))
-                HotelItemImage()
+                DefaultImage(modifier = Modifier.height(200.dp)
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(CornerSize(8.dp))))
                 if (uiState.isEditMode) {
                     Spacer(modifier = Modifier.height(16.dp))
                 } else {
@@ -193,20 +196,6 @@ fun EditHotelDataButton(onEditButtonClick:() -> Unit, uiState: HotelItemUiState)
             )
         }
     }
-}
-
-
-@Composable
-fun HotelItemImage() {
-    Image(
-        painter = painterResource(id = R.drawable.ic_launcher_background),
-        contentDescription = null,
-        contentScale = ContentScale.Crop,
-        modifier = Modifier
-            .height(200.dp)
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(CornerSize(8.dp)))
-    )
 }
 
 @Composable

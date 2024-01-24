@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -29,6 +30,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -55,11 +57,11 @@ fun HotelCard(
             .fillMaxWidth()
             .padding(20.dp)
             .background(gradientBrush)
-            .clickable( onClick = onClick),
+            .clickable(onClick = onClick),
         //todo: navigation to hotelItem
         elevation = 12.dp,
         shape = RoundedCornerShape(10.dp)
-     ) {
+    ) {
         Column {
             Item(hotelItem)
         }
@@ -104,7 +106,8 @@ fun HotelList(
 
                     Box(
                         modifier = modifier
-                            .align(Alignment.End).padding(25.dp)
+                            .align(Alignment.End)
+                            .padding(25.dp)
                     ) {
                         Button(
                             onClick = {
@@ -134,26 +137,50 @@ fun HotelList(
 
 @Composable
 private fun Item(hotelItem: HotelItem) {
-    Column(Modifier.padding(end = 16.dp, start = 16.dp, top = 10.dp)) {
-        Text(text = hotelItem.name, style = TextStyle(fontFamily = FontFamily.Monospace, fontSize = 18.sp, fontWeight = FontWeight.Bold))
-        Text(text = "Saint-Petersburg", style = TextStyle(fontFamily = FontFamily.Monospace, fontSize = 14.sp, fontWeight = FontWeight.ExtraLight, color = Color.Gray))
-        Row(
-            modifier = Modifier,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(
-                imageVector = Icons.Filled.Star,
-                modifier = Modifier.size(12.dp),
-                contentDescription = null,
-                tint = MaterialTheme.colors.primary
-            )
-            Spacer(modifier = Modifier.width(4.dp))
+    Row(Modifier.padding(end = 16.dp, start = 16.dp, top = 10.dp, bottom = 10.dp)) {
+        DefaultImage(
+            modifier = Modifier
+                .fillMaxHeight()
+                .width(100.dp)
+                .padding(end = 16.dp)
+                .clip(RoundedCornerShape(16.dp))
+        )
+        Column {
             Text(
-                text = hotelItem.rating?.toString() ?: "0",
-                style = TextStyle(fontFamily = FontFamily.Monospace),
-                color = MaterialTheme.colors.primary
+                text = hotelItem.name,
+                style = TextStyle(
+                    fontFamily = FontFamily.Monospace,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
+                )
             )
+            Text(
+                text = "Saint-Petersburg",
+                style = TextStyle(
+                    fontFamily = FontFamily.Monospace,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.ExtraLight,
+                    color = Color.Gray
+                )
+            )
+            Row(
+                modifier = Modifier,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Star,
+                    modifier = Modifier.size(12.dp),
+                    contentDescription = null,
+                    tint = MaterialTheme.colors.primary
+                )
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(
+                    text = hotelItem.rating?.toString() ?: "0",
+                    style = TextStyle(fontFamily = FontFamily.Monospace),
+                    color = MaterialTheme.colors.primary
+                )
+            }
+            Spacer(modifier = Modifier.padding(8.dp))
         }
-        Spacer(modifier = Modifier.padding(8.dp))
     }
 }
