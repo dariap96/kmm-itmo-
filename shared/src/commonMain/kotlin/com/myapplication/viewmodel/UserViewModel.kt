@@ -19,43 +19,41 @@ class UserViewModel(private val repository: UserRepository): SharedViewModel() {
 
     val items = _items.asStateFlow()
 
-    init {
-        sharedViewModelScope.launch {
+    fun getWhoAmI() = sharedViewModelScope.launch {
+        println("Whoami")
 
+        repository.whoAmI().collect { result ->
+            println("get current user data")
 
-            repository.whoAmI().collect { result ->
-                println("get current user data")
-
-                when(result.status) {
-                    Resource.Status.LOADING -> {
-                        _items.update {
-                            it.copy(status = Resource.Status.LOADING)
-                        }
-                    }
-
-                    Resource.Status.ERROR -> {
-                        _items.update {
-                            it.copy(status = Resource.Status.ERROR, error = it.error)
-                        }
-                    }
-
-                    Resource.Status.SUCCESS -> {
-                        _items.update {
-                            it.copy(
-                                status = Resource.Status.SUCCESS,
-                                error = null,
-                                data = result.data
-                            )
-                        }
-                        val user = result.data
-                    }
-
-                    else -> {
-                        _items.update { it }
+            when(result.status) {
+                Resource.Status.LOADING -> {
+                    _items.update {
+                        it.copy(status = Resource.Status.LOADING)
                     }
                 }
 
+                Resource.Status.ERROR -> {
+                    _items.update {
+                        it.copy(status = Resource.Status.ERROR, error = it.error)
+                    }
+                }
+
+                Resource.Status.SUCCESS -> {
+                    _items.update {
+                        it.copy(
+                            status = Resource.Status.SUCCESS,
+                            error = null,
+                            data = result.data
+                        )
+                    }
+                    val user = result.data
+                }
+
+                else -> {
+                    _items.update { it }
+                }
             }
+
         }
     }
 }

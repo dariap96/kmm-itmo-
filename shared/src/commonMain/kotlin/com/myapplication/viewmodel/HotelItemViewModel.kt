@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 class HotelItemViewModel(
     private val repository: HotelRepository,
-    private val userRepository: UserRepository): SharedViewModel() {
+    private val userRepository: UserViewModel): SharedViewModel() {
 
     var uiState by mutableStateOf(HotelItemUiState())
         private set
@@ -19,12 +19,7 @@ class HotelItemViewModel(
 
     init {
         sharedViewModelScope.launch {
-            //todo: pass hotel id
-            //getHotelItem(id)
-            var role = ""
-            userRepository.whoAmI().collect { result ->
-                role = result.data?.role!!.role
-            }
+            var role = userRepository.items.value.data?.role?.role
             uiState = if (role === "DIRECTOR") {
                 uiState.copy(isAbleToEdit = true)
             } else {
@@ -33,7 +28,7 @@ class HotelItemViewModel(
         }
     }
 
-    private suspend fun getHotelItem(id: Int) {
+    fun getHotelItem(id: Int) = sharedViewModelScope.launch {
         repository.getHotelById(id).collect { result ->
             println("collect hotelItem result")
 

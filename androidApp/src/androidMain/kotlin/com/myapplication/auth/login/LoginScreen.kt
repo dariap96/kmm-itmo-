@@ -32,7 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.myapplication.AppScreen
+import com.myapplication.model.AppScreen
 import com.myapplication.R
 import com.myapplication.auth.login.LoginUiState
 import com.myapplication.common.components.CustomTextField
@@ -42,7 +42,6 @@ import com.myapplication.common.theming.ExtraLargeSpacing
 import com.myapplication.common.theming.LargeSpacing
 import com.myapplication.common.theming.MediumSpacing
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun LoginScreen(
     navController: NavHostController,
@@ -52,7 +51,6 @@ fun LoginScreen(
     onPasswordChange: (String) -> Unit,
     onSignIn:() -> Unit
 ) {
-    val keyboardController = LocalSoftwareKeyboardController.current
     val context = LocalContext.current
     Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(
@@ -84,8 +82,6 @@ fun LoginScreen(
                 onValueChange = onLoginChange,
                 hint = R.string.username_hint,
                 keyboardType = KeyboardType.Text,
-                keyboardActions = KeyboardActions(
-                    onDone = {keyboardController?.hide()})
             )
 
             CustomTextField(
@@ -94,8 +90,6 @@ fun LoginScreen(
                 hint = R.string.password_hint,
                 keyboardType = KeyboardType.Password,
                 isPasswordTextField = true,
-                keyboardActions = KeyboardActions(
-                    onDone = {keyboardController?.hide()})
             )
 
             Spacer(modifier = Modifier.height(10.dp))

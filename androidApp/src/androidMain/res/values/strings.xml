@@ -8,6 +8,7 @@
     <string name="signup_button_hint">Signup</string>
     <string name="username_hint">login</string>
     <string name="name_hint">name</string>
+    <string name="stage_count_hint">Stage Count</string>
     <string name="hotel_name_hint">Hotel name</string>
     <string name="surname_hint">surname</string>
     <string name="email_hint">email</string>

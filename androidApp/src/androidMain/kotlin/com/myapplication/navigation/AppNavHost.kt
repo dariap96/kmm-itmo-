@@ -4,13 +4,16 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.myapplication.AppScreen
+import androidx.navigation.navArgument
+import com.myapplication.model.AppScreen
 import com.myapplication.HotelList
 import com.myapplication.auth.login.Login
 import com.myapplication.auth.signup.SignUp
 import com.myapplication.hotelItem.HotelItem
+import com.myapplication.home.CreateHotelScreen
 
 @Composable
 fun AppNavHost(
@@ -27,6 +30,9 @@ fun AppNavHost(
         composable(route = AppScreen.Hotels.name) {
             HotelList(navHostController)
         }
+        composable(route = AppScreen.CreateHotel.name) {
+            CreateHotelScreen(navHostController)
+        }
 
         composable(route = AppScreen.Managers.name) {
             Text(text = "Managers List todo") // todo
@@ -40,8 +46,11 @@ fun AppNavHost(
             SignUp(navHostController)
         }
 
-        composable(route = AppScreen.HotelItem.name) {
-            HotelItem(navHostController)
+        composable(route = "${AppScreen.HotelItem.name}/{hotelId}", arguments = listOf(navArgument("hotelId") {
+            type = NavType.IntType
+        })) {
+            val id = requireNotNull(it.arguments).getInt("hotelId")
+            HotelItem(navHostController, id)
         }
 
         composable(route = AppScreen.Clients.name) {

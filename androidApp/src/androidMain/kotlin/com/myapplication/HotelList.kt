@@ -12,15 +12,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
 import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -36,41 +38,44 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.myapplication.data.hotel.HotelItem
+import com.myapplication.model.AppScreen
 import com.myapplication.model.Resource
 import com.myapplication.viewmodel.HotelViewModel
 import org.koin.androidx.compose.koinViewModel
 
 private val gradientBrush = Brush.verticalGradient(listOf(Color(0x004B4B4B), Color(0x00000000)))
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HotelCard(
-    hotelIem: HotelItem,
-    navController: NavHostController
+    hotelItem: HotelItem,
+    onClick: () -> Unit,
 ) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
             .padding(20.dp)
             .background(gradientBrush)
-            .clickable {  },
+            .clickable( onClick = onClick),
         //todo: navigation to hotelItem
         elevation = 12.dp,
         shape = RoundedCornerShape(10.dp)
      ) {
         Column {
-            Item(hotelIem)
+            Item(hotelItem)
         }
     }
 }
 
 @Composable
-fun HotelList(navController: NavHostController) {
+fun HotelList(
+    navHostController: NavHostController,
+    modifier: Modifier = Modifier
+) {
     val hotelViewModel = koinViewModel<HotelViewModel>()
     val items by hotelViewModel.items.collectAsState()
 
     MaterialTheme {
-        Scaffold(content = { paddingValues ->
+        Scaffold { paddingValues ->
             if (items.status == Resource.Status.LOADING) {
                 Box(
                     contentAlignment = Alignment.Center,
@@ -84,15 +89,46 @@ fun HotelList(navController: NavHostController) {
                     )
                 }
             } else if (items.status == Resource.Status.SUCCESS) {
-                LazyColumn(modifier = Modifier.padding(paddingValues)) {
-                    items(items.data.size) { index ->
-                        HotelCard(items.data[index], navController)
+                Column(modifier = Modifier.fillMaxSize()) {
+                    LazyColumn(
+                        modifier = Modifier
+                            .padding(paddingValues)
+                            .weight(1f)
+                    ) {
+                        items(items.data.size) { index ->
+                            HotelCard(items.data[index]) {
+                                navHostController.navigate("${AppScreen.HotelItem.name}/${items.data[index].id}")
+                            }
+                        }
+                    }
+
+                    Box(
+                        modifier = modifier
+                            .align(Alignment.End).padding(25.dp)
+                    ) {
+                        Button(
+                            onClick = {
+                                // onSignInClick()
+                                navHostController.navigate(AppScreen.CreateHotel.name)
+                            },
+                            modifier = modifier
+                                .size(50.dp),
+//                        elevation = ButtonDefaults.elevation(
+//                            defaultElevation = 0.dp
+//                        ),
+                            shape = CircleShape
+                        ) {
+                            Icon(
+                                Icons.Default.Add,
+                                contentDescription = "content description"
+                            ) // todo string resource
+                        }
                     }
                 }
             } else {
                 Text(text = items.error ?: "")
             }
-        })
+        }
     }
 }
 

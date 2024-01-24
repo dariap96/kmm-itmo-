@@ -19,21 +19,33 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.myapplication.common.theming.AppTheme
+import com.myapplication.model.AppScreen
 import com.myapplication.model.MenuItem
 import com.myapplication.navigation.AppNavHost
+import com.myapplication.service.TopBarService
 import com.myapplication.ui.AppBar
 import com.myapplication.ui.DrawerBody
 import com.myapplication.ui.DrawerHeader
+import com.myapplication.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
+import org.koin.androidx.compose.koinViewModel
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
+            val userViewModel = koinViewModel<UserViewModel>()
+            val userFlow = userViewModel.items
+            val topBarService: TopBarService by inject()
             val navController: NavHostController = rememberNavController()
-            val navStackBackEntry by navController.currentBackStackEntryAsState()
-            val currentDestination = navStackBackEntry?.destination?.route
+
+            navController.addOnDestinationChangedListener { controller, destination, arguments ->
+                println("DESTINATION CHANGE ${destination}")
+                topBarService.stateByScreen(destination.route ?: AppScreen.Login.name)
+            }
+            userViewModel.getWhoAmI()
 
             AppTheme {
                 val scaffoldState = rememberScaffoldState()
@@ -41,7 +53,7 @@ class MainActivity : AppCompatActivity() {
                 Scaffold(
                     scaffoldState = scaffoldState,
                     topBar = {
-                        if (currentDestination !== AppScreen.Login.name) {
+                        if (topBarService.state.isVisible) {
                             AppBar(
                                 onNavigationClick = {
                                     scope.launch {

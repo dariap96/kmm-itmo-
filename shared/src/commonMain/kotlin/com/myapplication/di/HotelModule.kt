@@ -5,6 +5,8 @@ import com.myapplication.auth.UserRepository
 import com.myapplication.auth.login.LoginViewModel
 import com.myapplication.data.hotel.HotelRepository
 import com.myapplication.data.httpClient
+import com.myapplication.service.TopBarService
+import com.myapplication.viewmodel.CreateHotelViewModel
 import com.myapplication.viewmodel.HotelItemViewModel
 import com.myapplication.viewmodel.HotelViewModel
 import com.myapplication.viewmodel.SharedViewModel
@@ -93,6 +95,10 @@ val hotelModule = module {
         UserRepository(get(named("auth")))
     }
 
+    single {
+        TopBarService()
+    }
+
     sharedViewModel {
         LoginViewModel(get())
     }
@@ -106,10 +112,14 @@ val hotelModule = module {
     }
 
     sharedViewModel {
+        UserViewModel(get())
+    }
+
+    sharedViewModel {
         HotelItemViewModel(get(), get())
     }
 
     sharedViewModel {
-        UserViewModel(get())
+        CreateHotelViewModel(get())
     }
 }

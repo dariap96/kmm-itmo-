@@ -6,8 +6,10 @@ import com.myapplication.viewmodel.HotelItemViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun HotelItem(navController: NavHostController) {
+fun HotelItem(navController: NavHostController, hotelId: Int) {
+    println("HOTEL ID $hotelId")
     val viewModel: HotelItemViewModel = koinViewModel()
+    viewModel.getHotelItem(hotelId)
     HotelItemScreen(
         navController = navController,
         uiState = viewModel.uiState,

@@ -38,7 +38,6 @@ fun CustomTextField(
     keyboardType: KeyboardType = KeyboardType.Text,
     isPasswordTextField: Boolean = false,
     isSingleLine: Boolean = true,
-    keyboardActions: KeyboardActions?,
     @StringRes hint: Int
 ) {
 
@@ -154,7 +153,6 @@ fun CustomTextFieldPreview() {
             value = "",
             onValueChange = {},
             hint = R.string.default_error_message,
-            keyboardActions = KeyboardActions()
         )
     }
 }

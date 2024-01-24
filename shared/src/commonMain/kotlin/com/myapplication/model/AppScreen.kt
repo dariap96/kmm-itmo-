@@ -1,11 +1,12 @@
-package com.myapplication
+package com.myapplication.model
 
-enum class AppScreen() {
+enum class AppScreen {
     Hotels,
     Managers,
     Login,
     SignUp,
     Clients,
     Requests,
+    CreateHotel,
     HotelItem
 }
