@@ -1,60 +1,63 @@
 package com.myapplication.hotelItem
 
 import android.widget.Toast
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Card
 import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import com.myapplication.common.theming.AppTheme
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.width
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.outlined.Clear
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.myapplication.DefaultImage
 import com.myapplication.R
 import com.myapplication.common.components.NonAuthCustomTextField
+import com.myapplication.common.theming.AppTheme
 import com.myapplication.common.theming.Blue
 import com.myapplication.common.theming.ButtonHeight
+import com.myapplication.data.hotel.RoomItem
 import com.myapplication.viewmodel.HotelItemUiState
+import kotlin.math.roundToInt
 
 @Composable
-fun HotelItemScreen (
+fun HotelItemScreen(
     navController: NavHostController,
     uiState: HotelItemUiState,
     onNameChange: (String) -> Unit,
     onStageCountChange: (String) -> Unit,
-    onUpdate:() -> Unit,
-    onEditButtonClick:() -> Unit
+    onUpdate: () -> Unit,
+    onEditButtonClick: () -> Unit
 ) {
     val context = LocalContext.current
 
@@ -65,7 +68,6 @@ fun HotelItemScreen (
                 .fillMaxSize()
                 .padding(16.dp)
                 .clip(RoundedCornerShape(CornerSize(16.dp)))
-                .clickable { }
         ) {
             Column(
                 modifier = Modifier
@@ -88,10 +90,12 @@ fun HotelItemScreen (
                 }
                 Spacer(modifier = Modifier.height(20.dp))
                 if (uiState.isAbleToEdit) {
-                    Row (modifier = Modifier
-                        .fillMaxWidth(),
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween) {
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
                         Spacer(modifier = Modifier.width(20.dp))
                         EditHotelDataButton(onEditButtonClick, uiState)
                     }
@@ -107,13 +111,16 @@ fun HotelItemScreen (
                     Text(text = "Hotel name: ${uiState.name}")
                 }
                 Spacer(modifier = Modifier.height(16.dp))
-                DefaultImage(modifier = Modifier.height(200.dp)
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(CornerSize(8.dp))))
+                DefaultImage(
+                    modifier = Modifier
+                        .height(200.dp)
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(CornerSize(8.dp)))
+                )
                 if (uiState.isEditMode) {
                     Spacer(modifier = Modifier.height(16.dp))
                 } else {
-                Spacer(modifier = Modifier.height(32.dp))
+                    Spacer(modifier = Modifier.height(32.dp))
                 }
                 Text(text = "HOTEL DETAILS", style = MaterialTheme.typography.h6)
                 Spacer(modifier = Modifier.height(16.dp))
@@ -143,7 +150,7 @@ fun HotelItemScreen (
 }
 
 @Composable
-fun UpdateHotelDataButton(onUpdate:() -> Unit, uiState: HotelItemUiState) {
+fun UpdateHotelDataButton(onUpdate: () -> Unit, uiState: HotelItemUiState) {
     Button(
         onClick = {
             onUpdate()
@@ -161,7 +168,7 @@ fun UpdateHotelDataButton(onUpdate:() -> Unit, uiState: HotelItemUiState) {
 }
 
 @Composable
-fun EditHotelDataButton(onEditButtonClick:() -> Unit, uiState: HotelItemUiState) {
+fun EditHotelDataButton(onEditButtonClick: () -> Unit, uiState: HotelItemUiState) {
     Button(
         onClick = {
             onEditButtonClick()
@@ -200,8 +207,21 @@ fun EditHotelDataButton(onEditButtonClick:() -> Unit, uiState: HotelItemUiState)
 
 @Composable
 fun HotelItemDetails(uiState: HotelItemUiState, onStageCountChange: (String) -> Unit) {
+    val scrollState = rememberScrollState()
+
     Column {
         Text(text = "Rooms: ${uiState.rooms.size}")
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .horizontalScroll(
+                    state = scrollState,
+                ),
+        ) {
+            uiState.rooms.map { room ->
+                RoomCard(roomItem = room)
+            }
+        }
         Spacer(modifier = Modifier.height(10.dp))
         if (uiState.isEditMode) {
             NonAuthCustomTextField(
@@ -214,6 +234,55 @@ fun HotelItemDetails(uiState: HotelItemUiState, onStageCountChange: (String) -> 
         }
         Spacer(modifier = Modifier.height(10.dp))
         Text(text = "Director Info ID: ${uiState.directorInfoId}")
+    }
+}
+
+@Composable
+fun RoomCard(roomItem: RoomItem) {
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .width(140.dp),
+        elevation = 6.dp
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxWidth()
+        ) {
+            DefaultImage(
+                modifier = Modifier
+                    .height(60.dp)
+                    .width(60.dp)
+                    .clip(RoundedCornerShape(8.dp))
+            )
+            Spacer(modifier = Modifier.width(5.dp))
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "Room ${roomItem.number}", fontSize = 12.sp)
+                Spacer(modifier = Modifier.height(5.dp))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Person,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .width(10.dp)
+                            .height(10.dp)
+                    )
+                    Text(text = " ${roomItem.capacity}", fontSize = 10.sp)
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = "${roomItem.price.roundToInt()}$",
+                    fontSize = 12.sp,
+                    modifier = Modifier.align(Alignment.End),
+                    color = MaterialTheme.colors.primary
+                )
+            }
+        }
     }
 }
 
@@ -245,14 +314,20 @@ fun HotelItemPreview() {
     AppTheme {
         val hotelUIState = HotelItemUiState(
             name = "Sample Hotel",
-            rooms = listOf(),
+            rooms = listOf(
+                RoomItem(0, 12, 14, 2, 100.00, false, 1, 1),
+                RoomItem(0, 12, 14, 2, 100.00, false, 1, 1),
+                RoomItem(0, 12, 14, 2, 100.00, false, 1, 1),
+                RoomItem(0, 12, 14, 2, 100.00, false, 1, 1),
+                RoomItem(0, 12, 14, 2, 100.00, false, 1, 1)
+            ),
             stages = "3",
             directorInfoId = 123,
             rating = 4.0
         )
         HotelItemScreen(
             rememberNavController(),
-            uiState = HotelItemUiState(),
+            uiState = hotelUIState,
             onNameChange = {},
             onStageCountChange = {},
             onUpdate = {},

@@ -6,9 +6,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -140,7 +140,7 @@ private fun Item(hotelItem: HotelItem) {
     Row(Modifier.padding(end = 16.dp, start = 16.dp, top = 10.dp, bottom = 10.dp)) {
         DefaultImage(
             modifier = Modifier
-                .fillMaxHeight()
+                .height(100.dp)
                 .width(100.dp)
                 .padding(end = 16.dp)
                 .clip(RoundedCornerShape(16.dp))
