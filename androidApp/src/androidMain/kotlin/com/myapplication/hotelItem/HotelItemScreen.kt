@@ -27,7 +27,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.Clear
+import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -82,11 +82,7 @@ fun HotelItemScreen(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(text = "HOTEL", style = MaterialTheme.typography.h6)
-                    uiState.rating.let { rating ->
-                        if (rating != null) {
-                            HotelItemRating(rating)
-                        }
-                    }
+                    HotelItemRating(uiState.rating)
                 }
                 Spacer(modifier = Modifier.height(20.dp))
                 if (uiState.isAbleToEdit) {
@@ -287,16 +283,16 @@ fun RoomCard(roomItem: RoomItem) {
 }
 
 @Composable
-fun HotelItemRating(rating: Double) {
+fun HotelItemRating(rating: Double? = null) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(4.dp)
     ) {
         repeat(5) { index ->
-            val starIcon = if (index < rating) {
+            val starIcon = if (rating != null && index < rating) {
                 Icons.Filled.Star
             } else {
-                Icons.Outlined.Clear
+                Icons.Outlined.StarOutline
             }
             Icon(
                 imageVector = starIcon,
