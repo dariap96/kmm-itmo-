@@ -39,13 +39,14 @@ import com.myapplication.common.theming.ExtraLargeSpacing
 import com.myapplication.common.theming.LargeSpacing
 import com.myapplication.common.theming.MediumSpacing
 import com.myapplication.common.theming.SmallSpacing
-import com.myapplication.viewmodel.SignUpUiState
+import com.myapplication.model.AppScreen
+import com.myapplication.viewmodel.CreateManagerUiState
 
 @Composable
-fun SignUpScreen(
+fun CreateManagerScreen(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-    uiState: SignUpUiState,
+    uiState: CreateManagerUiState,
     onLoginChange: (String) -> Unit,
     onNameChange: (String) -> Unit,
     onSurnameChange: (String) -> Unit,
@@ -111,8 +112,6 @@ fun SignUpScreen(
 
             Button(
                 onClick = {
-                    //todo: implement set role logic
-                    uiState.role = "manager"
                     onSignUp()
                 },
                 modifier = modifier
@@ -146,7 +145,7 @@ fun SignUpScreen(
         key2 = uiState.authErrorMessage,
         block = {
             if (uiState.authenticationSucceed) {
-              //  onNavigateToHome()
+              navController.navigate(AppScreen.Managers.name)
             }
 
             if (uiState.authErrorMessage?.isNotEmpty() == true) {
@@ -180,9 +179,9 @@ fun GoToLogin(
 @Composable
 fun SignUpScreenPreview() {
     AppTheme {
-        SignUpScreen(
+        CreateManagerScreen(
             rememberNavController(),
-            uiState = SignUpUiState(),
+            uiState = CreateManagerUiState(),
             onLoginChange = {},
             onNameChange = {},
             onSurnameChange = {},

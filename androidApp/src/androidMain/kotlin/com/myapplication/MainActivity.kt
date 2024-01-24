@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -36,11 +37,12 @@ class MainActivity : AppCompatActivity() {
         setContent {
             val userService by inject<UserService>()
             val topBarService: TopBarService by inject()
+            val topBarState = topBarService.state.collectAsState()
             val navController: NavHostController = rememberNavController()
 
             navController.addOnDestinationChangedListener { controller, destination, arguments ->
-                println("DESTINATION CHANGE ${destination}")
                 topBarService.stateByScreen(destination.route ?: AppScreen.Login.name)
+                topBarService.setTitleByScreen(destination.route ?: AppScreen.Login.name)
             }
             userService.getWhoAmI()
 
@@ -50,17 +52,18 @@ class MainActivity : AppCompatActivity() {
                 Scaffold(
                     scaffoldState = scaffoldState,
                     topBar = {
-                        if (topBarService.state.isVisible) {
+                        if (topBarState.value.isVisible) {
                             AppBar(
                                 onNavigationClick = {
                                     scope.launch {
                                         scaffoldState.drawerState.open()
                                     }
-                                }
+                                },
+                                title = topBarState.value.title
                             )
                         }
                     },
-                    drawerGesturesEnabled =  scaffoldState.drawerState.isOpen,
+                    drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
                     drawerContent = {
                         DrawerHeader()
                         Divider()
