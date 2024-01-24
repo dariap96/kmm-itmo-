@@ -13,6 +13,7 @@ fun HotelItem(navController: NavHostController) {
         uiState = viewModel.uiState,
         onNameChange = viewModel::updateName,
         onStageCountChange = viewModel::updateStageCount,
-        onUpdate = viewModel::updateHotelItem
+        onUpdate = viewModel::updateHotelItem,
+        onEditButtonClick = viewModel::initEditMode
     )
 }

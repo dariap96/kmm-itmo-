@@ -56,3 +56,8 @@ class HotelViewModel(private val repository: HotelRepository): SharedViewModel()
         }
     }
 }
+
+data class HotelListUiState (
+    val isHotelItemOpened: Boolean = false,
+    val openedHotelItemId: Int = 0,
+)

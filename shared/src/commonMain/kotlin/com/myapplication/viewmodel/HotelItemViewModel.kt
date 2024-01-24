@@ -69,12 +69,11 @@ class HotelItemViewModel(
     }
 
     fun updateName(input: String){
-        uiState = uiState.copy(name = input, isUpdateButtonActive = true)
-        uiState = uiState.copy(isUpdateButtonActive = true)
+        uiState = uiState.copy(name = input)
     }
 
     fun updateStageCount(input: String){
-        uiState = uiState.copy(stages = input, isUpdateButtonActive = true)
+        uiState = uiState.copy(stages = input)
     }
 
     fun updateHotelItem() {
@@ -94,7 +93,6 @@ class HotelItemViewModel(
                             name = result.data!!.name,
                             stages = result.data.stageCount.toString(),
                             updateSucceed = false,
-                            isUpdateButtonActive = false,
                             isUpdating = false
                         )
                     }
@@ -105,7 +103,8 @@ class HotelItemViewModel(
                             stages = result.data.stageCount.toString(),
                             updateSucceed = true,
                             isUpdateButtonActive = false,
-                            isUpdating = false
+                            isUpdating = false,
+                            isEditMode = false
                         )
                     }
 
@@ -116,6 +115,10 @@ class HotelItemViewModel(
 
             }
         }
+    }
+
+    fun initEditMode() {
+        uiState = uiState.copy(isEditMode = true, isUpdateButtonActive = true)
     }
 }
 
@@ -129,6 +132,7 @@ data class HotelItemUiState(
     var updateErrorMessage: String? = "",
     var updateSucceed: Boolean = false,
     var isUpdateButtonActive: Boolean = false,
-    var isAbleToEdit: Boolean = false,
-    var currentHotelId: Int = 0
+    var isAbleToEdit: Boolean = true,
+    var currentHotelId: Int = 0,
+    var isEditMode: Boolean = true
 )

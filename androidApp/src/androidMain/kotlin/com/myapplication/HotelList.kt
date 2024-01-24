@@ -1,6 +1,7 @@
 package com.myapplication
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -51,10 +52,11 @@ fun HotelCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(20.dp)
-            .background(gradientBrush),
+            .background(gradientBrush)
+            .clickable {  },
+        //todo: navigation to hotelItem
         elevation = 12.dp,
-        shape = RoundedCornerShape(10.dp),
-//        onClick = onClick todo open details page
+        shape = RoundedCornerShape(10.dp)
      ) {
         Column {
             Item(hotelIem)

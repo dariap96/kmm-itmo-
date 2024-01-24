@@ -27,10 +27,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.myapplication.common.theming.AppTheme
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.graphics.Color
@@ -49,7 +52,8 @@ fun HotelItemScreen (
     uiState: HotelItemUiState,
     onNameChange: (String) -> Unit,
     onStageCountChange: (String) -> Unit,
-    onUpdate:() -> Unit
+    onUpdate:() -> Unit,
+    onEditButtonClick:() -> Unit
 ) {
     val context = LocalContext.current
 
@@ -70,7 +74,7 @@ fun HotelItemScreen (
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 4.dp, horizontal = 8.dp),
+                        .padding(vertical = 4.dp),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
@@ -83,6 +87,16 @@ fun HotelItemScreen (
                 }
                 Spacer(modifier = Modifier.height(20.dp))
                 if (uiState.isAbleToEdit) {
+                    Row (modifier = Modifier
+                        .fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween) {
+                        Spacer(modifier = Modifier.width(20.dp))
+                        EditHotelDataButton(onEditButtonClick, uiState)
+                    }
+                }
+                if (uiState.isEditMode) {
+                    Spacer(modifier = Modifier.height(16.dp))
                     NonAuthCustomTextField(
                         hint = R.string.hotel_name_hint,
                         value = uiState.name,
@@ -93,10 +107,18 @@ fun HotelItemScreen (
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 HotelItemImage()
+                if (uiState.isEditMode) {
+                    Spacer(modifier = Modifier.height(16.dp))
+                } else {
+                Spacer(modifier = Modifier.height(32.dp))
+                }
+                Text(text = "HOTEL DETAILS", style = MaterialTheme.typography.h6)
                 Spacer(modifier = Modifier.height(16.dp))
                 HotelItemDetails(uiState, onStageCountChange)
                 Spacer(modifier = Modifier.height(30.dp))
-                UpdateHotelDataButton(onUpdate, uiState)
+                if (uiState.isEditMode) {
+                    UpdateHotelDataButton(onUpdate, uiState)
+                }
             }
         }
     }
@@ -129,11 +151,50 @@ fun UpdateHotelDataButton(onUpdate:() -> Unit, uiState: HotelItemUiState) {
         colors = ButtonDefaults.buttonColors(
             backgroundColor = Blue
         ),
-        enabled = uiState.isUpdateButtonActive
+        enabled = uiState.isEditMode
     ) {
         Text(text = "Update Hotel Data", color = Color.White)
     }
 }
+
+@Composable
+fun EditHotelDataButton(onEditButtonClick:() -> Unit, uiState: HotelItemUiState) {
+    Button(
+        onClick = {
+            onEditButtonClick()
+        },
+        modifier = Modifier
+            .width(40.dp)
+            .height(40.dp),
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = Blue
+        ),
+        shape = RoundedCornerShape(100),
+        enabled = !uiState.isEditMode,
+        contentPadding = PaddingValues(0.dp)
+    ) {
+        if (uiState.isEditMode) {
+            Icon(
+                imageVector = Icons.Default.Edit,
+                contentDescription = null,
+                tint = Color.White,
+                modifier = Modifier
+                    .width(20.dp)
+                    .height(20.dp)
+            )
+        } else {
+            Icon(
+                imageVector = Icons.Default.Edit,
+                contentDescription = null,
+                tint = Color.White,
+                modifier = Modifier
+                    .width(20.dp)
+                    .height(20.dp)
+            )
+        }
+    }
+}
+
 
 @Composable
 fun HotelItemImage() {
@@ -153,7 +214,7 @@ fun HotelItemDetails(uiState: HotelItemUiState, onStageCountChange: (String) -> 
     Column {
         Text(text = "Rooms: ${uiState.rooms.size}")
         Spacer(modifier = Modifier.height(10.dp))
-        if (!uiState.isAbleToEdit) {
+        if (uiState.isEditMode) {
             NonAuthCustomTextField(
                 hint = R.string.stages_hint,
                 value = uiState.stages,
@@ -205,7 +266,8 @@ fun HotelItemPreview() {
             uiState = HotelItemUiState(),
             onNameChange = {},
             onStageCountChange = {},
-            onUpdate = {}
+            onUpdate = {},
+            onEditButtonClick = {}
         )
     }
 }
