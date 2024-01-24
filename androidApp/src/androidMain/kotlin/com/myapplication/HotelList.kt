@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
@@ -32,6 +33,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.myapplication.data.hotel.HotelItem
 import com.myapplication.model.Resource
 import com.myapplication.viewmodel.HotelViewModel
@@ -39,12 +41,16 @@ import org.koin.androidx.compose.koinViewModel
 
 private val gradientBrush = Brush.verticalGradient(listOf(Color(0x004B4B4B), Color(0x00000000)))
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun HotelCard(
-    hotelIem: HotelItem
+    hotelIem: HotelItem,
+    navController: NavHostController
 ) {
     Surface(
-        modifier = Modifier.fillMaxWidth().padding(20.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(20.dp)
             .background(gradientBrush),
         elevation = 12.dp,
         shape = RoundedCornerShape(10.dp),
@@ -57,7 +63,7 @@ fun HotelCard(
 }
 
 @Composable
-fun HotelList() {
+fun HotelList(navController: NavHostController) {
     val hotelViewModel = koinViewModel<HotelViewModel>()
     val items by hotelViewModel.items.collectAsState()
 
@@ -69,14 +75,16 @@ fun HotelList() {
                     modifier = Modifier.fillMaxSize()
                 ) {
                     CircularProgressIndicator(
-                        modifier = Modifier.width(64.dp).padding(paddingValues),
+                        modifier = Modifier
+                            .width(64.dp)
+                            .padding(paddingValues),
                         color = MaterialTheme.colors.primary,
                     )
                 }
             } else if (items.status == Resource.Status.SUCCESS) {
                 LazyColumn(modifier = Modifier.padding(paddingValues)) {
                     items(items.data.size) { index ->
-                        HotelCard(items.data[index])
+                        HotelCard(items.data[index], navController)
                     }
                 }
             } else {

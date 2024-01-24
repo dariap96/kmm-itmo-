@@ -90,6 +90,7 @@ fun CustomTextField(
 
 }
 
+//todo: get rid of. use modifier to change height
 @Composable
 fun NonAuthCustomTextField(
     modifier: Modifier = Modifier,

@@ -4,7 +4,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import com.myapplication.auth.AuthRepository
-import com.myapplication.auth.LoginRequest
 import com.myapplication.auth.SignUpRequest
 import com.myapplication.model.Resource
 import kotlinx.coroutines.launch
@@ -13,6 +12,8 @@ class SignUpViewModel(private val authRepository: AuthRepository
 ): SharedViewModel() {
     var uiState by mutableStateOf(SignUpUiState())
         private set
+
+    //todo: clean uiState.autherrormessage for launcheffect to wotk correctly
 
     fun signUp(){
         sharedViewModelScope.launch {

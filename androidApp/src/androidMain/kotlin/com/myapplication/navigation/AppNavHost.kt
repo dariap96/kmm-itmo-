@@ -10,6 +10,7 @@ import com.myapplication.AppScreen
 import com.myapplication.HotelList
 import com.myapplication.auth.login.Login
 import com.myapplication.auth.signup.SignUp
+import com.myapplication.hotelItem.HotelItem
 
 @Composable
 fun AppNavHost(
@@ -24,7 +25,7 @@ fun AppNavHost(
         modifier = modifier
     ) {
         composable(route = AppScreen.Hotels.name) {
-            HotelList()
+            HotelList(navHostController)
         }
 
         composable(route = AppScreen.Managers.name) {
@@ -37,6 +38,10 @@ fun AppNavHost(
 
         composable(route = AppScreen.SignUp.name) {
             SignUp(navHostController)
+        }
+
+        composable(route = AppScreen.HotelItem.name) {
+            HotelItem(navHostController)
         }
 
         composable(route = AppScreen.Clients.name) {

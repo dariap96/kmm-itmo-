@@ -16,6 +16,8 @@ class LoginViewModel(
     var uiState by mutableStateOf(LoginUiState())
         private set
 
+    //todo: clean uiState.autherrormessage for launcheffect to wotk correctly
+
     fun signIn(){
         sharedViewModelScope.launch {
             uiState = uiState.copy(isAuthenticating = true)
