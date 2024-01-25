@@ -17,4 +17,8 @@
     <string name="stages_hint">Stages</string>
     <string name="room_price_hint">Room price</string>
     <string name="manager_info_id_hint">Manager Info ID</string>
+    <string name="room_number_hint">Room number</string>
+    <string name="room_capacity_hint">Room capacity</string>
+    <string name="floor_hint">Floor</string>
+    <string name="is_vip_hint">Does room has VIP status ? true/false required</string>
 </resources>

@@ -19,3 +19,14 @@ data class RoomUpdateRequest(
     val managerId: Int,
     val price: Double
 )
+
+@Serializable
+data class CreateRoomRequest(
+    val number: Int,
+    val capacity: Int,
+    val floor: Int,
+    val price: Double,
+    val isVip: Boolean,
+    val managerId: Int,
+    val hotelId: Int
+)

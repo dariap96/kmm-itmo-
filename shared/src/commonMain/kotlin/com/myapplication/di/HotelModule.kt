@@ -15,6 +15,7 @@ import com.myapplication.viewmodel.HotelViewModel
 import com.myapplication.viewmodel.ManagerViewModel
 import com.myapplication.viewmodel.SharedViewModel
 import com.myapplication.viewmodel.CreateManagerViewModel
+import com.myapplication.viewmodel.CreateRoomViewModel
 import com.myapplication.viewmodel.RequestViewModel
 import com.myapplication.viewmodel.RoomItemViewModel
 import com.myapplication.viewmodel.UserService
@@ -146,6 +147,10 @@ val hotelModule = module {
 
     sharedViewModel {
         ManagerViewModel(get(), get())
+    }
+
+    sharedViewModel {
+        CreateRoomViewModel(get(), get())
     }
 
     sharedViewModel {

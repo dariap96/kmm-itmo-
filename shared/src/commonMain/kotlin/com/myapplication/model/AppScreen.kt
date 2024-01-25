@@ -10,5 +10,6 @@ enum class AppScreen {
     CreateHotel,
     HotelItem,
     CreateManager,
-    RoomItem
+    RoomItem,
+    CreateRoom
 }

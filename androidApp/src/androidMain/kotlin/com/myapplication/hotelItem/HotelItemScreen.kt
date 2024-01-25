@@ -126,7 +126,7 @@ fun HotelItemScreen(
                 }
                 Text(text = "HOTEL DETAILS", style = MaterialTheme.typography.h6)
                 Spacer(modifier = Modifier.height(16.dp))
-                HotelItemDetails(uiState, onStageCountChange, onRoomItemClick = { id ->
+                HotelItemDetails(uiState, navController, onStageCountChange, onRoomItemClick = { id ->
                     navController.navigate("${AppScreen.RoomItem.name}/${id}")
                 })
                 Spacer(modifier = Modifier.height(30.dp))
@@ -212,6 +212,7 @@ fun EditHotelDataButton(onEditButtonClick: () -> Unit, uiState: HotelItemUiState
 @Composable
 fun HotelItemDetails(
     uiState: HotelItemUiState,
+    navController: NavHostController,
     onStageCountChange: (String) -> Unit,
     onRoomItemClick: (Int) -> Unit
 ) {
@@ -228,7 +229,7 @@ fun HotelItemDetails(
         ) {
             if (uiState.isEditMode) {
                 OutlinedButton(
-                    onClick = { /*TODO create item*/ },
+                    onClick = { navController.navigate("${AppScreen.CreateRoom.name}/${uiState.currentHotelId}")},
                     modifier = Modifier
                         .padding(8.dp)
                         .width(100.dp)

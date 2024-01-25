@@ -14,6 +14,7 @@ import com.myapplication.auth.login.Login
 import com.myapplication.auth.signup.CreateManager
 import com.myapplication.hotelItem.HotelItem
 import com.myapplication.home.CreateHotelScreen
+import com.myapplication.hotelItem.CreateRoomScreen
 import com.myapplication.manager.ManagerList
 import com.myapplication.request.RequestList
 import com.myapplication.roomItem.RoomItem
@@ -34,6 +35,13 @@ fun AppNavHost(
         }
         composable(route = AppScreen.CreateHotel.name) {
             CreateHotelScreen(navHostController)
+        }
+
+        composable(route = "${AppScreen.CreateRoom.name}/{hotelId}", arguments = listOf(navArgument("hotelId") {
+            type = NavType.IntType
+        })) {
+            val id = requireNotNull(it.arguments).getInt("hotelId")
+            CreateRoomScreen(navHostController, id)
         }
 
         composable(route = AppScreen.Managers.name) {

@@ -1,4 +1,4 @@
-package com.myapplication.home
+package com.myapplication.hotelItem
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -31,16 +31,17 @@ import com.myapplication.common.theming.ExtraLargeSpacing
 import com.myapplication.common.theming.LargeSpacing
 import com.myapplication.common.theming.MediumSpacing
 import com.myapplication.model.AppScreen
-import com.myapplication.viewmodel.CreateHotelViewModel
+import com.myapplication.viewmodel.CreateRoomViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun CreateHotelScreen(
+fun CreateRoomScreen(
     navHostController: NavHostController,
+    hotelId: Int,
     modifier: Modifier = Modifier
 ) {
-    val createHotelViewModel = koinViewModel<CreateHotelViewModel>()
-    val state = createHotelViewModel.createHotelState.collectAsState().value
+    val createRoomViewModel = koinViewModel<CreateRoomViewModel>()
+    val state = createRoomViewModel.createRoomState.collectAsState().value
     val context = LocalContext.current
 
     Box(modifier = modifier.fillMaxSize().background(MaterialTheme.colors.surface), contentAlignment = Alignment.Center) {
@@ -59,21 +60,44 @@ fun CreateHotelScreen(
         ) {
 
             CustomTextField(
-                value = state.name,
-                onValueChange = createHotelViewModel::changeName,
-                hint = R.string.name_hint,
+                value = state.number,
+                onValueChange = createRoomViewModel::updateNumber,
+                hint = R.string.room_number_hint,
             )
 
             CustomTextField(
-                value = state.stageCount,
-                onValueChange = { value -> createHotelViewModel.changeStageCount(value)},
-                hint = R.string.stage_count_hint,
+                value = state.capacity,
+                onValueChange = createRoomViewModel::updateCapacity,
+                hint = R.string.room_capacity_hint,
+                keyboardType = KeyboardType.Number
+            )
+
+            CustomTextField(
+                value = state.floor,
+                onValueChange = createRoomViewModel::updateFloor,
+                hint = R.string.floor_hint,
+                keyboardType = KeyboardType.Number
+            )
+
+            CustomTextField(
+                value = state.price,
+                onValueChange = createRoomViewModel::updatePrice,
+                hint = R.string.room_price_hint,
                 keyboardType = KeyboardType.Decimal
             )
 
+            CustomTextField(
+                value = state.isVip,
+                onValueChange = createRoomViewModel::updateIsVip,
+                hint = R.string.is_vip_hint,
+                keyboardType = KeyboardType.Text
+            )
+            //add manager dropdown
+
+
             Button(
                 onClick = {
-                    createHotelViewModel.createHotel()
+                    createRoomViewModel.createRoom(hotelId)
                 },
                 modifier = modifier
                     .fillMaxWidth()
@@ -81,19 +105,24 @@ fun CreateHotelScreen(
                 elevation = ButtonDefaults.elevation(
                     defaultElevation = 0.dp
                 ),
-                shape = MaterialTheme.shapes.medium
+                shape = MaterialTheme.shapes.medium,
+                enabled = state.isVip.isNotEmpty()
+                        && state.capacity.isNotEmpty()
+                        && state.floor.isNotEmpty()
+                        && state.number.isNotEmpty()
+                        && state.price.isNotEmpty()
             ) {
-                Text(text = "Create hotel")
+                Text(text = "Create new room")
             }
 
         }
 
         LaunchedEffect(
-            key1 = state.hotelCreated,
+            key1 = state.roomCreated,
             block = {
-                if (state.hotelCreated) {
-                    Toast.makeText(context, "new hotel created", Toast.LENGTH_SHORT).show()
-                    navHostController.navigate(AppScreen.Hotels.name)
+                if (state.roomCreated) {
+                    Toast.makeText(context, "new room created", Toast.LENGTH_SHORT).show()
+                    navHostController.navigate("${AppScreen.HotelItem.name}/${hotelId}")
                 }
             }
         )
