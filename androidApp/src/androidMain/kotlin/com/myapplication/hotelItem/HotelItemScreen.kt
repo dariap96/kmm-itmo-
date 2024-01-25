@@ -23,9 +23,11 @@ import androidx.compose.material.Card
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Star
@@ -224,6 +226,27 @@ fun HotelItemDetails(
                     state = scrollState,
                 ),
         ) {
+            if (uiState.isEditMode) {
+                OutlinedButton(
+                    onClick = { /*TODO create item*/ },
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .width(100.dp)
+                        .height(76.dp),
+                    elevation = ButtonDefaults.elevation(
+                        defaultElevation = 6.dp
+                    )
+                ) {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Icon(imageVector = Icons.Default.Add, contentDescription = null)
+                        Spacer(modifier = Modifier.height(5.dp))
+                        Text(text = "Add Room", fontSize = 12.sp)
+                    }
+
+                }
+            }
             uiState.rooms.map { room ->
                 RoomCard(roomItem = room, onRoomItemClick)
             }
