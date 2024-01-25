@@ -15,6 +15,7 @@ import com.myapplication.auth.signup.CreateManager
 import com.myapplication.hotelItem.HotelItem
 import com.myapplication.home.CreateHotelScreen
 import com.myapplication.manager.ManagerList
+import com.myapplication.roomItem.RoomItem
 
 @Composable
 fun AppNavHost(
@@ -61,7 +62,7 @@ fun AppNavHost(
             type = NavType.IntType
         })) {
             val id = requireNotNull(it.arguments).getInt("roomId")
-//            HotelItem(navHostController, id) todo roomItem
+            RoomItem(navHostController, id)
         }
 
         composable(route = AppScreen.Clients.name) {

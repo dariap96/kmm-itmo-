@@ -81,12 +81,12 @@ class MainActivity : AppCompatActivity() {
                                     contentDescription = "Go to managers screen",
                                     icon = Icons.Default.AccountCircle
                                 ),
-                                MenuItem(
-                                    id = AppScreen.Clients.name,
-                                    title = "Clients",
-                                    contentDescription = "Go to clients screen",
-                                    icon = Icons.Default.List
-                                ),
+//                                MenuItem(
+//                                    id = AppScreen.Clients.name,
+//                                    title = "Clients",
+//                                    contentDescription = "Go to clients screen",
+//                                    icon = Icons.Default.List
+//                                ),
                                 MenuItem(
                                     id = AppScreen.Requests.name,
                                     title = "Requests",

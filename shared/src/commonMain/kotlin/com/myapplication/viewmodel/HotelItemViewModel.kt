@@ -30,7 +30,7 @@ class HotelItemViewModel(
 
     fun getHotelItem(id: Int) = sharedViewModelScope.launch {
         repository.getHotelById(id).collect { result ->
-            println("collect hotelItem result")
+            println("collect hotelItem result $result")
 
             when(result.status) {
                 Resource.Status.LOADING -> {
@@ -92,6 +92,7 @@ class HotelItemViewModel(
 
                     Resource.Status.SUCCESS -> {
                         uiState = uiState.copy(
+
                             updateSucceed = true,
                             isUpdateButtonActive = false,
                             isUpdating = false,

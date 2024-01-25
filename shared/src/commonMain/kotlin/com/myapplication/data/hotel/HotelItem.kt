@@ -17,3 +17,10 @@ data class HotelUpdateRequest(
     var name: String,
     var stageCount: Int
 )
+
+@Serializable
+data class SetHotelRequest(
+    val name: String,
+    val stageCount: Int,
+    val userId: Int
+)

@@ -8,11 +8,13 @@
     <string name="signup_button_hint">Signup</string>
     <string name="username_hint">login</string>
     <string name="name_hint">name</string>
-    <string name="stage_count_hint">Stage Count</string>
+    <string name="stage_count_hint">stage count</string>
     <string name="hotel_name_hint">Hotel name</string>
     <string name="surname_hint">surname</string>
     <string name="email_hint">email</string>
     <string name="default_error_message">error</string>
     <string name="login_button_label">Login</string>
     <string name="stages_hint">Stages</string>
+    <string name="room_price_hint">Room price</string>
+    <string name="manager_info_id_hint">Manager Info ID</string>
 </resources>

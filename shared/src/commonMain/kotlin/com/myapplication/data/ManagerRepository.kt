@@ -23,4 +23,15 @@ class ManagerRepository(private val authorizedHttpClient: HttpClient) {
             emit(Resource.error(error = e.message))
         }
     }
+
+    suspend fun getManagerInfoById(id: Int): Flow<Resource<ManagerItem>> = flow {
+        emit(Resource.loading())
+        try {
+            val data = authorizedHttpClient.get(urlString = "/api/managerInfo/$id").body<ManagerItem>()
+            emit(Resource.success(data))
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emit(Resource.error(error = e.message))
+        }
+    }
 }

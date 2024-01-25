@@ -5,6 +5,7 @@ import com.myapplication.auth.UserRepository
 import com.myapplication.auth.login.LoginViewModel
 import com.myapplication.data.ManagerRepository
 import com.myapplication.data.hotel.HotelRepository
+import com.myapplication.data.hotel.RoomRepository
 import com.myapplication.data.httpClient
 import com.myapplication.service.TopBarService
 import com.myapplication.viewmodel.CreateHotelViewModel
@@ -13,6 +14,7 @@ import com.myapplication.viewmodel.HotelViewModel
 import com.myapplication.viewmodel.ManagerViewModel
 import com.myapplication.viewmodel.SharedViewModel
 import com.myapplication.viewmodel.CreateManagerViewModel
+import com.myapplication.viewmodel.RoomItemViewModel
 import com.myapplication.viewmodel.UserService
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BearerTokens
@@ -112,6 +114,10 @@ val hotelModule = module {
         ManagerRepository(get(named("auth")))
     }
 
+    single {
+        RoomRepository(get(named("auth")))
+    }
+
     sharedViewModel {
         LoginViewModel(get(), get())
     }
@@ -129,10 +135,14 @@ val hotelModule = module {
     }
 
     sharedViewModel {
-        CreateHotelViewModel(get())
+        CreateHotelViewModel(get(), get())
     }
 
     sharedViewModel {
         ManagerViewModel(get(), get())
+    }
+
+    sharedViewModel {
+        RoomItemViewModel(get(), get(), get())
     }
 }

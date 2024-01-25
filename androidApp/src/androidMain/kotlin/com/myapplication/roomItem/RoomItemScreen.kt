@@ -1,4 +1,4 @@
-package com.myapplication.hotelItem
+package com.myapplication.roomItem
 
 import android.widget.Toast
 import androidx.compose.foundation.horizontalScroll
@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerSize
@@ -19,17 +18,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -39,7 +33,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.myapplication.DefaultImage
@@ -48,17 +41,14 @@ import com.myapplication.common.components.NonAuthCustomTextField
 import com.myapplication.common.theming.AppTheme
 import com.myapplication.common.theming.Blue
 import com.myapplication.common.theming.ButtonHeight
-import com.myapplication.data.hotel.RoomItem
-import com.myapplication.model.AppScreen
-import com.myapplication.viewmodel.HotelItemUiState
-import kotlin.math.roundToInt
+import com.myapplication.viewmodel.RoomItemUiState
 
 @Composable
-fun HotelItemScreen(
+fun RoomItemScreen(
     navController: NavHostController,
-    uiState: HotelItemUiState,
-    onNameChange: (String) -> Unit,
-    onStageCountChange: (String) -> Unit,
+    uiState: RoomItemUiState,
+    onManagerIdChange: (String) -> Unit,
+    onPriceChange: (String) -> Unit,
     onUpdate: () -> Unit,
     onEditButtonClick: () -> Unit
 ) {
@@ -85,8 +75,7 @@ fun HotelItemScreen(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(text = "HOTEL", style = MaterialTheme.typography.h6)
-                    HotelItemRating(uiState.rating)
+                    Text(text = "ROOM #${uiState.number}", style = MaterialTheme.typography.h6)
                 }
                 Spacer(modifier = Modifier.height(20.dp))
                 if (uiState.isAbleToEdit) {
@@ -97,19 +86,11 @@ fun HotelItemScreen(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Spacer(modifier = Modifier.width(20.dp))
-                        EditHotelDataButton(onEditButtonClick, uiState)
+                        EditRoomDataButton(onEditButtonClick, uiState)
                     }
                 }
-                if (uiState.isEditMode) {
-                    Spacer(modifier = Modifier.height(16.dp))
-                    NonAuthCustomTextField(
-                        hint = R.string.hotel_name_hint,
-                        value = uiState.name,
-                        onValueChange = onNameChange
-                    )
-                } else {
-                    Text(text = "Hotel name: ${uiState.name}")
-                }
+
+                Text(text = "VIP: ${uiState.isVip}", style = MaterialTheme.typography.h6)
                 Spacer(modifier = Modifier.height(16.dp))
                 DefaultImage(
                     modifier = Modifier
@@ -122,14 +103,12 @@ fun HotelItemScreen(
                 } else {
                     Spacer(modifier = Modifier.height(32.dp))
                 }
-                Text(text = "HOTEL DETAILS", style = MaterialTheme.typography.h6)
+                Text(text = "ROOM DETAILS", style = MaterialTheme.typography.h6)
                 Spacer(modifier = Modifier.height(16.dp))
-                HotelItemDetails(uiState, onStageCountChange, onRoomItemClick = { id ->
-                    navController.navigate("${AppScreen.RoomItem.name}/${id}")
-                })
+                RoomItemDetails(uiState, onManagerIdChange, onPriceChange)
                 Spacer(modifier = Modifier.height(30.dp))
                 if (uiState.isEditMode) {
-                    UpdateHotelDataButton(onUpdate, uiState)
+                    UpdateRoomDataButton(onUpdate, uiState)
                 }
             }
         }
@@ -140,7 +119,7 @@ fun HotelItemScreen(
         key2 = uiState.updateErrorMessage,
         block = {
             if (uiState.updateSucceed) {
-                Toast.makeText(context, "hotel data was updated", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "room data was updated", Toast.LENGTH_SHORT).show()
             }
 
             if (uiState.updateErrorMessage?.isNotEmpty() == true) {
@@ -152,7 +131,7 @@ fun HotelItemScreen(
 }
 
 @Composable
-fun UpdateHotelDataButton(onUpdate: () -> Unit, uiState: HotelItemUiState) {
+fun UpdateRoomDataButton(onUpdate: () -> Unit, uiState: RoomItemUiState) {
     Button(
         onClick = {
             onUpdate()
@@ -165,12 +144,12 @@ fun UpdateHotelDataButton(onUpdate: () -> Unit, uiState: HotelItemUiState) {
         ),
         enabled = uiState.isEditMode
     ) {
-        Text(text = "Update Hotel Data", color = Color.White)
+        Text(text = "Update Room Data", color = Color.White)
     }
 }
 
 @Composable
-fun EditHotelDataButton(onEditButtonClick: () -> Unit, uiState: HotelItemUiState) {
+fun EditRoomDataButton(onEditButtonClick: () -> Unit, uiState: RoomItemUiState) {
     Button(
         onClick = {
             onEditButtonClick()
@@ -208,15 +187,15 @@ fun EditHotelDataButton(onEditButtonClick: () -> Unit, uiState: HotelItemUiState
 }
 
 @Composable
-fun HotelItemDetails(
-    uiState: HotelItemUiState,
-    onStageCountChange: (String) -> Unit,
-    onRoomItemClick: (Int) -> Unit
+fun RoomItemDetails(
+    uiState: RoomItemUiState,
+    onManagerIdChange: (String) -> Unit,
+    onPriceChange:  (String) -> Unit
 ) {
     val scrollState = rememberScrollState()
 
     Column {
-        Text(text = "Rooms: ${uiState.rooms.size}")
+        Text(text = "Capacity: ${uiState.capacity}")
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -224,96 +203,35 @@ fun HotelItemDetails(
                     state = scrollState,
                 ),
         ) {
-            uiState.rooms.map { room ->
-                RoomCard(roomItem = room, onRoomItemClick)
+
+        }
+        Spacer(modifier = Modifier.height(10.dp))
+        Text(text = "Floor: ${uiState.floor}")
+        Spacer(modifier = Modifier.height(10.dp))
+        if (uiState.isEditMode) {
+            Text(text = "Price: ${uiState.managerInfoId}")
+            Spacer(modifier = Modifier.height(16.dp))
+            NonAuthCustomTextField(
+                hint = R.string.room_price_hint,
+                value = uiState.price.toString(),
+                onValueChange = onPriceChange
+            )
+        } else {
+            Row {
+                Text(text = "Price: ")
+                Text(text = "${uiState.price}$", color = MaterialTheme.colors.primary)
             }
         }
         Spacer(modifier = Modifier.height(10.dp))
         if (uiState.isEditMode) {
-            NonAuthCustomTextField(
-                hint = R.string.stages_hint,
-                value = uiState.stages,
-                onValueChange = onStageCountChange
-            )
+            Text(text = "Select manager assignee:")
+//            NonAuthCustomTextField(
+//                hint = R.string.manager_info_id_hint,
+//                value = uiState.currentManager.toString(),
+//                onValueChange = onManagerIdChange
+//            )
         } else {
-            Text(text = "Stages: ${uiState.stages.length}")
-        }
-        Spacer(modifier = Modifier.height(10.dp))
-        Text(text = "Director Info ID: ${uiState.directorInfoId}")
-    }
-}
-
-@OptIn(ExperimentalMaterialApi::class)
-@Composable
-fun RoomCard(roomItem: RoomItem, onRoomItemClick: (Int) -> Unit) {
-    Card(
-        modifier = Modifier
-            .padding(8.dp)
-            .width(140.dp),
-        elevation = 6.dp,
-        onClick = {
-            onRoomItemClick(roomItem.id)
-        }
-    ) {
-        Row(
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxWidth()
-        ) {
-            DefaultImage(
-                modifier = Modifier
-                    .height(60.dp)
-                    .width(60.dp)
-                    .clip(RoundedCornerShape(8.dp))
-            )
-            Spacer(modifier = Modifier.width(5.dp))
-            Column(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(text = "Room ${roomItem.number}", fontSize = 12.sp)
-                Spacer(modifier = Modifier.height(5.dp))
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Person,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .width(10.dp)
-                            .height(10.dp)
-                    )
-                    Text(text = " ${roomItem.capacity}", fontSize = 10.sp)
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(
-                    text = "${roomItem.price.roundToInt()}$",
-                    fontSize = 12.sp,
-                    modifier = Modifier.align(Alignment.End),
-                    color = MaterialTheme.colors.primary
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun HotelItemRating(rating: Double? = null) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(4.dp)
-    ) {
-        repeat(5) { index ->
-            val starIcon = if (rating != null && index < rating) {
-                Icons.Filled.Star
-            } else {
-                Icons.Outlined.StarOutline
-            }
-            Icon(
-                imageVector = starIcon,
-                contentDescription = null,
-                tint = Color.Gray,
-                modifier = Modifier.size(16.dp)
-            )
+            Text(text = "Current Manager Assigned: ${uiState.managerName} ${uiState.managerSurname}")
         }
     }
 }
@@ -322,24 +240,13 @@ fun HotelItemRating(rating: Double? = null) {
 @Composable
 fun HotelItemPreview() {
     AppTheme {
-        val hotelUIState = HotelItemUiState(
-            name = "Sample Hotel",
-            rooms = listOf(
-                RoomItem(0, 12, 14, 2, 100.00, false, 1, 1),
-                RoomItem(0, 12, 14, 2, 100.00, false, 1, 1),
-                RoomItem(0, 12, 14, 2, 100.00, false, 1, 1),
-                RoomItem(0, 12, 14, 2, 100.00, false, 1, 1),
-                RoomItem(0, 12, 14, 2, 100.00, false, 1, 1)
-            ),
-            stages = "3",
-            directorInfoId = 123,
-            rating = 4.0
+        val roomUIState = RoomItemUiState(
         )
-        HotelItemScreen(
+        RoomItemScreen(
             rememberNavController(),
-            uiState = hotelUIState,
-            onNameChange = {},
-            onStageCountChange = {},
+            uiState = roomUIState,
+            onManagerIdChange = {},
+            onPriceChange = {},
             onUpdate = {},
             onEditButtonClick = {}
         )

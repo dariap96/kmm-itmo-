@@ -13,3 +13,9 @@ data class RoomItem(
     val managerInfoId: Int,
     val hotelId: Int
 )
+
+@Serializable
+data class RoomUpdateRequest(
+    val managerId: Int,
+    val price: Double
+)
