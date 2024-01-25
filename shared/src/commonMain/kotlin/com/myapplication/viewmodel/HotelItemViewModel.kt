@@ -73,10 +73,10 @@ class HotelItemViewModel(
 
     fun updateHotelItem() {
         sharedViewModelScope.launch {
-            repository.updateHotel(uiState.currentHotelId).collect { result ->
+            repository.updateHotel(uiState.currentHotelId, uiState.name,
+                uiState.stages.toInt()).collect { result ->
 
                 println("updating hotelItem data ")
-
                 when(result.status) {
 
                     Resource.Status.LOADING -> {
@@ -85,8 +85,6 @@ class HotelItemViewModel(
 
                     Resource.Status.ERROR -> {
                         uiState = uiState.copy(
-                            name = result.data!!.name,
-                            stages = result.data.stageCount.toString(),
                             updateSucceed = false,
                             isUpdating = false
                         )
@@ -94,8 +92,6 @@ class HotelItemViewModel(
 
                     Resource.Status.SUCCESS -> {
                         uiState = uiState.copy(
-                            name = result.data!!.name,
-                            stages = result.data.stageCount.toString(),
                             updateSucceed = true,
                             isUpdateButtonActive = false,
                             isUpdating = false,
@@ -129,5 +125,6 @@ data class HotelItemUiState(
     var isUpdateButtonActive: Boolean = false,
     var isAbleToEdit: Boolean = false,
     var currentHotelId: Int = 0,
-    var isEditMode: Boolean = false
+    var isEditMode: Boolean = false,
+    var isDataFetched: Boolean = false
 )

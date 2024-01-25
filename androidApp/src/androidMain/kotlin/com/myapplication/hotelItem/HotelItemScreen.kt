@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
@@ -60,9 +61,9 @@ fun HotelItemScreen(
     onEditButtonClick: () -> Unit
 ) {
     val context = LocalContext.current
+    val scrollState = rememberScrollState()
 
     AppTheme {
-
         Surface(
             modifier = Modifier
                 .fillMaxSize()
@@ -73,6 +74,7 @@ fun HotelItemScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
+                    .verticalScroll(scrollState)
             ) {
                 Row(
                     modifier = Modifier

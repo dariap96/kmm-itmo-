@@ -40,7 +40,8 @@ class LoginViewModel(
                     Resource.Status.SUCCESS -> {
                         uiState = uiState.copy(
                         isAuthenticating =  false,
-                        authenticationSucceed = true
+                        authenticationSucceed = true,
+                        authErrorMessage = ""
                         )
                         println("user logged in")
 

@@ -8,7 +8,10 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun HotelItem(navController: NavHostController, hotelId: Int) {
     val viewModel: HotelItemViewModel = koinViewModel()
-    viewModel.getHotelItem(hotelId)
+    if (!viewModel.uiState.isDataFetched) {
+        viewModel.getHotelItem(hotelId)
+        viewModel.uiState.isDataFetched = true
+    }
     HotelItemScreen(
         navController = navController,
         uiState = viewModel.uiState,

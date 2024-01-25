@@ -11,3 +11,9 @@ data class HotelItem(
     val directorInfoId: Int,
     val rating: Double?,
 )
+
+@Serializable
+data class HotelUpdateRequest(
+    var name: String,
+    var stageCount: Int
+)

@@ -39,7 +39,8 @@ class SignUpViewModel(private val authRepository: AuthRepository
                     Resource.Status.SUCCESS -> {
                         uiState = uiState.copy(
                             isAuthenticating =  false,
-                            authenticationSucceed = false
+                            authenticationSucceed = false,
+                            authErrorMessage = ""
                         )
                         println("user signed up")
                     }
