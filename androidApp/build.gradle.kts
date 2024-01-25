@@ -28,7 +28,6 @@ kotlin {
                 implementation("androidx.core:core-splashscreen:1.0.1")
                 implementation("androidx.datastore:datastore-preferences:1.0.0")
                 implementation("androidx.compose.material:material-icons-extended")
-                implementation("androidx.compose.material3.ButtonDefaults")
             }
         }
     }
