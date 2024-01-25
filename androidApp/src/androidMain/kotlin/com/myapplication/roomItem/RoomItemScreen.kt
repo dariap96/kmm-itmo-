@@ -266,8 +266,8 @@ fun RoomItemDetails(
             }
         } else {
             Text(text = "Current Manager Assigned:")
-            Text(text = "${uiState.managerLogin}, ${uiState.managerName} ${uiState.managerSurname}",
-                color = MaterialTheme.colors.primary)
+            Text(text = "${uiState.managerLogin}", style = MaterialTheme.typography.h6)
+            Text("${uiState.managerName} ${uiState.managerSurname}")
         }
     }
 }
