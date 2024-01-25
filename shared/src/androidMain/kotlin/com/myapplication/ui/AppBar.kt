@@ -11,11 +11,12 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun AppBar(
-    onNavigationClick: () -> Unit
+    onNavigationClick: () -> Unit,
+    title: String
 ) {
     TopAppBar(
         title = {
-            Text(text = "Hotel") // todo maybe add in DI
+            Text(text = title)
         },
         backgroundColor = MaterialTheme.colors.primary,
         contentColor = MaterialTheme.colors.onPrimary,

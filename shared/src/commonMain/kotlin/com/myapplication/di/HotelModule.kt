@@ -3,14 +3,16 @@ package com.myapplication.di
 import com.myapplication.auth.AuthRepository
 import com.myapplication.auth.UserRepository
 import com.myapplication.auth.login.LoginViewModel
+import com.myapplication.data.ManagerRepository
 import com.myapplication.data.hotel.HotelRepository
 import com.myapplication.data.httpClient
 import com.myapplication.service.TopBarService
 import com.myapplication.viewmodel.CreateHotelViewModel
 import com.myapplication.viewmodel.HotelItemViewModel
 import com.myapplication.viewmodel.HotelViewModel
+import com.myapplication.viewmodel.ManagerViewModel
 import com.myapplication.viewmodel.SharedViewModel
-import com.myapplication.viewmodel.SignUpViewModel
+import com.myapplication.viewmodel.CreateManagerViewModel
 import com.myapplication.viewmodel.UserService
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BearerTokens
@@ -49,7 +51,10 @@ val hotelModule = module {
             install(Auth) {
                 bearer {
                     loadTokens {
-                        BearerTokens(bearerTokenStorage.last().accessToken, bearerTokenStorage.last().refreshToken)
+                        BearerTokens(
+                            bearerTokenStorage.last().accessToken,
+                            bearerTokenStorage.last().refreshToken
+                        )
                     }
                 }
             }
@@ -88,7 +93,7 @@ val hotelModule = module {
     }
 
     single {
-        AuthRepository(get(named("auth")),get(named("noAuth")))
+        AuthRepository(get(named("auth")), get(named("noAuth")))
     }
 
     single {
@@ -99,20 +104,24 @@ val hotelModule = module {
         TopBarService()
     }
 
+    single {
+        UserService(get())
+    }
+
+    single {
+        ManagerRepository(get(named("auth")))
+    }
+
     sharedViewModel {
         LoginViewModel(get(), get())
     }
 
     sharedViewModel {
-        SignUpViewModel(get())
+        CreateManagerViewModel(get())
     }
 
     sharedViewModel {
         HotelViewModel(get())
-    }
-
-    single {
-        UserService(get())
     }
 
     sharedViewModel {
@@ -121,5 +130,9 @@ val hotelModule = module {
 
     sharedViewModel {
         CreateHotelViewModel(get())
+    }
+
+    sharedViewModel {
+        ManagerViewModel(get(), get())
     }
 }

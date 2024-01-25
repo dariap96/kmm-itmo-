@@ -2,13 +2,13 @@ package com.myapplication.auth.signup
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import com.myapplication.viewmodel.SignUpViewModel
+import com.myapplication.viewmodel.CreateManagerViewModel
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun SignUp(navController: NavHostController) {
-    val viewModel: SignUpViewModel = koinViewModel()
-    SignUpScreen(
+fun CreateManager(navController: NavHostController) {
+    val viewModel: CreateManagerViewModel = koinViewModel()
+    CreateManagerScreen(
         navController = navController,
         uiState = viewModel.uiState,
         onLoginChange = viewModel::updateLogin,

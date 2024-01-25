@@ -20,6 +20,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -122,7 +123,9 @@ fun HotelItemScreen(
                 }
                 Text(text = "HOTEL DETAILS", style = MaterialTheme.typography.h6)
                 Spacer(modifier = Modifier.height(16.dp))
-                HotelItemDetails(uiState, onStageCountChange)
+                HotelItemDetails(uiState, onStageCountChange, onRoomItemClick = { id ->
+                    navController.navigate(id)
+                })
                 Spacer(modifier = Modifier.height(30.dp))
                 if (uiState.isEditMode) {
                     UpdateHotelDataButton(onUpdate, uiState)
@@ -204,7 +207,11 @@ fun EditHotelDataButton(onEditButtonClick: () -> Unit, uiState: HotelItemUiState
 }
 
 @Composable
-fun HotelItemDetails(uiState: HotelItemUiState, onStageCountChange: (String) -> Unit) {
+fun HotelItemDetails(
+    uiState: HotelItemUiState,
+    onStageCountChange: (String) -> Unit,
+    onRoomItemClick: (Int) -> Unit
+) {
     val scrollState = rememberScrollState()
 
     Column {
@@ -217,7 +224,7 @@ fun HotelItemDetails(uiState: HotelItemUiState, onStageCountChange: (String) -> 
                 ),
         ) {
             uiState.rooms.map { room ->
-                RoomCard(roomItem = room)
+                RoomCard(roomItem = room, onRoomItemClick)
             }
         }
         Spacer(modifier = Modifier.height(10.dp))
@@ -235,13 +242,17 @@ fun HotelItemDetails(uiState: HotelItemUiState, onStageCountChange: (String) -> 
     }
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun RoomCard(roomItem: RoomItem) {
+fun RoomCard(roomItem: RoomItem, onRoomItemClick: (Int) -> Unit) {
     Card(
         modifier = Modifier
             .padding(8.dp)
             .width(140.dp),
-        elevation = 6.dp
+        elevation = 6.dp,
+        onClick = {
+            onRoomItemClick(roomItem.id)
+        }
     ) {
         Row(
             modifier = Modifier
