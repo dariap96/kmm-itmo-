@@ -14,7 +14,8 @@ class TopBarService {
             AppScreen.CreateHotel.name,
             AppScreen.HotelItem.name,
             AppScreen.Hotels.name
-        ), "Managers" to listOf(AppScreen.Managers.name)
+        ), "Managers" to listOf(AppScreen.Managers.name, AppScreen.CreateManager.name),
+        "Request" to listOf(AppScreen.Requests.name)
     )
     val state = _state.asStateFlow()
 
@@ -44,9 +45,7 @@ class TopBarService {
 
     fun setTitleByScreen(screen: String) {
         screenToTitleMap.keys.forEach { key ->
-            println("key $key $screen")
             if (screenToTitleMap[key]?.any { it == screen } == true) {
-                println("setTitle")
                 setTitle(key)
             }
         }

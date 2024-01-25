@@ -9,12 +9,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.myapplication.model.AppScreen
-import com.myapplication.HotelList
+import com.myapplication.hotelItem.HotelList
 import com.myapplication.auth.login.Login
 import com.myapplication.auth.signup.CreateManager
 import com.myapplication.hotelItem.HotelItem
 import com.myapplication.home.CreateHotelScreen
 import com.myapplication.manager.ManagerList
+import com.myapplication.request.RequestList
 import com.myapplication.roomItem.RoomItem
 
 @Composable
@@ -51,16 +52,22 @@ fun AppNavHost(
             CreateManager(navHostController)
         }
 
-        composable(route = "${AppScreen.HotelItem.name}/{hotelId}", arguments = listOf(navArgument("hotelId") {
-            type = NavType.IntType
-        })) {
+        composable(
+            route = "${AppScreen.HotelItem.name}/{hotelId}",
+            arguments = listOf(navArgument("hotelId") {
+                type = NavType.IntType
+            })
+        ) {
             val id = requireNotNull(it.arguments).getInt("hotelId")
             HotelItem(navHostController, id)
         }
 
-        composable(route = "${AppScreen.RoomItem.name}/{roomId}", arguments = listOf(navArgument("roomId") {
-            type = NavType.IntType
-        })) {
+        composable(
+            route = "${AppScreen.RoomItem.name}/{roomId}",
+            arguments = listOf(navArgument("roomId") {
+                type = NavType.IntType
+            })
+        ) {
             val id = requireNotNull(it.arguments).getInt("roomId")
             RoomItem(navHostController, id)
         }
@@ -70,7 +77,7 @@ fun AppNavHost(
         }
 
         composable(route = AppScreen.Requests.name) {
-            Text(text = "Requests Screen todo") // todo
+            RequestList(navHostController)
         }
     }
 }

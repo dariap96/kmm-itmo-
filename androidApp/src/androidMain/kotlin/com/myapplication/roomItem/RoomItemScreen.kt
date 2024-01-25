@@ -43,7 +43,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.myapplication.DefaultImage
+import com.myapplication.common.components.DefaultImage
 import com.myapplication.R
 import com.myapplication.common.components.NonAuthCustomTextField
 import com.myapplication.common.theming.AppTheme
