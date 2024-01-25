@@ -1,8 +1,11 @@
 package com.myapplication.roomItem
 
 import android.widget.Toast
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -18,14 +21,19 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,13 +49,14 @@ import com.myapplication.common.components.NonAuthCustomTextField
 import com.myapplication.common.theming.AppTheme
 import com.myapplication.common.theming.Blue
 import com.myapplication.common.theming.ButtonHeight
+import com.myapplication.data.ManagerItem
 import com.myapplication.viewmodel.RoomItemUiState
 
 @Composable
 fun RoomItemScreen(
     navController: NavHostController,
     uiState: RoomItemUiState,
-    onManagerIdChange: (String) -> Unit,
+    onManagerChange: (ManagerItem) -> Unit,
     onPriceChange: (String) -> Unit,
     onUpdate: () -> Unit,
     onEditButtonClick: () -> Unit
@@ -105,7 +114,7 @@ fun RoomItemScreen(
                 }
                 Text(text = "ROOM DETAILS", style = MaterialTheme.typography.h6)
                 Spacer(modifier = Modifier.height(16.dp))
-                RoomItemDetails(uiState, onManagerIdChange, onPriceChange)
+                RoomItemDetails(uiState, onManagerChange, onPriceChange)
                 Spacer(modifier = Modifier.height(30.dp))
                 if (uiState.isEditMode) {
                     UpdateRoomDataButton(onUpdate, uiState)
@@ -189,10 +198,11 @@ fun EditRoomDataButton(onEditButtonClick: () -> Unit, uiState: RoomItemUiState) 
 @Composable
 fun RoomItemDetails(
     uiState: RoomItemUiState,
-    onManagerIdChange: (String) -> Unit,
+    onManagerChange: (ManagerItem) -> Unit,
     onPriceChange:  (String) -> Unit
 ) {
     val scrollState = rememberScrollState()
+    val expanded = remember { mutableStateOf(false) }
 
     Column {
         Text(text = "Capacity: ${uiState.capacity}")
@@ -224,14 +234,40 @@ fun RoomItemDetails(
         }
         Spacer(modifier = Modifier.height(10.dp))
         if (uiState.isEditMode) {
-            Text(text = "Select manager assignee:")
-//            NonAuthCustomTextField(
-//                hint = R.string.manager_info_id_hint,
-//                value = uiState.currentManager.toString(),
-//                onValueChange = onManagerIdChange
-//            )
+            Box(
+                modifier = Modifier
+                    .border(1.dp, Color.Gray, RoundedCornerShape(4.dp))
+                    .padding(2.dp)
+                    .clickable { expanded.value = true }
+            ){
+                Row {
+                    Text(
+                        text = "Please select manager assignee",
+                        Modifier.clickable { expanded.value = true })
+                    Spacer(modifier = Modifier.weight(1f))
+                    Icon(
+                        imageVector = Icons.Filled.ArrowDropDown,
+                        contentDescription = "Dropdown Arrow"
+                    )
+                }
+                DropdownMenu(
+                    expanded = expanded.value,
+                    onDismissRequest = { expanded.value = false }
+                ) {
+                    uiState.managerInfoList.forEach { managerInfo ->
+                        DropdownMenuItem(onClick = {
+                            onManagerChange(managerInfo)
+                            expanded.value = false
+                        }) {
+                            Text(text = managerInfo.manager.login)
+                        }
+                    }
+                }
+            }
         } else {
-            Text(text = "Current Manager Assigned: ${uiState.managerName} ${uiState.managerSurname}")
+            Text(text = "Current Manager Assigned:")
+            Text(text = "${uiState.managerLogin}, ${uiState.managerName} ${uiState.managerSurname}",
+                color = MaterialTheme.colors.primary)
         }
     }
 }
@@ -245,7 +281,7 @@ fun HotelItemPreview() {
         RoomItemScreen(
             rememberNavController(),
             uiState = roomUIState,
-            onManagerIdChange = {},
+            onManagerChange = {},
             onPriceChange = {},
             onUpdate = {},
             onEditButtonClick = {}

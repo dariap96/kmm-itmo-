@@ -15,7 +15,7 @@ fun RoomItem(navController: NavHostController, roomId: Int) {
     RoomItemScreen(
         navController = navController,
         uiState = viewModel.uiState,
-        onManagerIdChange = viewModel::updateManagerId,
+        onManagerChange = viewModel::updateManager,
         onPriceChange = viewModel::updatePrice,
         onUpdate = viewModel::updateRoomItem,
         onEditButtonClick = viewModel::initEditMode

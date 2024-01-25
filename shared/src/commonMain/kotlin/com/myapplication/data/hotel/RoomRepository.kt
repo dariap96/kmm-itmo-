@@ -25,7 +25,6 @@ class RoomRepository(private val authorizedHttpClient: HttpClient) {
 
     suspend fun updateRoom(id: Int, managerId: Int, price: Double): Flow<Resource<String>> = flow {
         emit(Resource.loading())
-        val request = RoomUpdateRequest(managerId, price)
         try {
             val data = authorizedHttpClient.patch(urlString = "/api/rooms/$id") {
                 contentType(ContentType.Application.Json)
